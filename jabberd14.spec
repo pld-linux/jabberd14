@@ -12,9 +12,9 @@ Source1:	http://docs.jabber.org/no-sgml/howto-1.4.html
 Source2:	%{name}d.init
 Source3:	%{name}d.sysconfig
 Patch0:		%{name}-FHS.patch
+URL:		http://www.jabber.org/
 BuildRequires:	pth-devel
 BuildRequires:	openssl-devel
-URL:		http://www.jabber.org/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -23,7 +23,7 @@ messaging system that uses a network of distributed servers to pass
 data between servers and ultimately to Jabber clients.
 
 %description -l pl
-Jabber to oparty o XML, arhitekturê klient-server oraz filozofiê
+Jabber to oparty o XML, architekturê klient-server oraz filozofiê
 open-source system powiadamiania, który wykorzystuje rozproszon± sieæ
 serwerów, do przekazywania danych pomiêdzy nimi i klientami Jabber.
 
@@ -51,10 +51,10 @@ Jabber.
 %prep
 %setup  -q
 %patch0 -p1
-cp %{SOURCE1} .
+cp -f %{SOURCE1} .
 
 %build
-export JHOME="%{_localstatedir}/lib/%{name}"
+JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %configure \
 	--enable-ssl
 %{__make}
@@ -83,8 +83,11 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/jabberd
 
 gzip -9nf README UPGRADE pthsock/README*
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %pre
-if [ $1 = 1 ] ; then
+if [ "$1" = 1 ] ; then
 	if [ ! -n "`getgid jabber`" ]; then
 		%{_sbindir}/groupadd -f -g 74 jabber
 	fi
@@ -115,9 +118,6 @@ if [ "$1" = "0" ]; then
 	%{_sbindir}/userdel jabber 2> /dev/null
 	%{_sbindir}/groupdel jabber 2> /dev/null
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
