@@ -1,0 +1,222 @@
+diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
+--- jabber-1.4.2.orig/jabber.xml	Tue Apr 29 11:28:48 2003
++++ jabber-1.4.2/jabber.xml	Tue Apr 29 11:33:08 2003
+@@ -253,6 +253,39 @@
+ 
+       </browse>
+ 
++      <disco>
++	<feature var="iq"/>
++	<feature var="message"/>
++	<feature var="presence"/>
++	<feature var="presence-invisible"/>
++	<feature var="jabber:client"/>
++	<feature var="jabber:server"/>
++	<feature var="jabber:iq:auth"/>
++	<feature var="jabber:iq:register"/>
++	<feature var="jabber:iq:roster"/>
++	<feature var="jabber:x:offline"/>
++	<feature var="jabber:iq:agent"/>
++	<feature var="jabber:iq:agents"/>
++	<feature var="jabber:x:delay"/>
++	<feature var="jabber:iq:version"/>
++	<feature var="jabber:iq:time"/>
++	<feature var="vcard-temp"/>
++	<feature var="jabber:iq:private"/>
++	<feature var="jabber:iq:search"/>
++	<feature var="jabber:iq:admin"/>
++	<feature var="jabber:iq:filter"/>
++	<feature var="jabber:iq:auth:0k"/>
++	<feature var="jabber:iq:browse"/>
++	<feature var="jabber:x:event"/>
++	<feature var="jabber:iq:conference"/>
++	<feature var="jabber:iq:last"/>
++	<feature var="jabber:x:expire"/>
++	<feature var="http://jabber.org/protocol/disco#items"/>
++	<feature var="http://jabber.org/protocol/disco#info"/>
++	<feature var="jabber:xdb:ginsert"/>
++	<feature var="jabber:xdb:nslist"/>
++      </disco>
++
+     </jsm>
+ 
+     <!--
+@@ -284,6 +317,7 @@
+       <mod_log>/usr/lib/jabberd/jsm.so</mod_log>
+       <mod_register>/usr/lib/jabberd/jsm.so</mod_register>
+       <mod_xml>/usr/lib/jabberd/jsm.so</mod_xml>
++      <mod_disco>/usr/lib/jabberd/jsm.so</mod_disco>
+     </load>
+ 
+   </service>
+diff -durN jabber-1.4.2.orig/jabberd/lib/lib.h jabber-1.4.2/jabberd/lib/lib.h
+--- jabber-1.4.2.orig/jabberd/lib/lib.h	Tue Apr 29 11:28:48 2003
++++ jabber-1.4.2/jabberd/lib/lib.h	Tue Apr 29 11:29:07 2003
+@@ -650,6 +650,8 @@
+ #define NS_ENVELOPE  "jabber:x:envelope"
+ #define NS_EXPIRE    "jabber:x:expire"
+ #define NS_XHTML     "http://www.w3.org/1999/xhtml"
++#define NS_DISCO_ITEMS "http://jabber.org/protocol/disco#items"
++#define NS_DISCO_INFO "http://jabber.org/protocol/disco#info"
+ 
+ #define NS_XDBGINSERT "jabber:xdb:ginsert"
+ #define NS_XDBNSLIST  "jabber:xdb:nslist"
+diff -durN jabber-1.4.2.orig/jsm/Makefile jabber-1.4.2/jsm/Makefile
+--- jabber-1.4.2.orig/jsm/Makefile	Mon Dec 17 21:09:12 2001
++++ jabber-1.4.2/jsm/Makefile	Tue Apr 29 11:29:07 2003
+@@ -38,7 +38,8 @@
+ 	modules/mod_register.o \
+ 	modules/mod_log.o \
+ 	modules/mod_last.o \
+-	modules/mod_offline.o
++	modules/mod_offline.o \
++	modules/mod_disco.o
+ 
+ SUBDIRS=modules
+ 
+diff -durN jabber-1.4.2.orig/jsm/modules/Makefile jabber-1.4.2/jsm/modules/Makefile
+--- jabber-1.4.2.orig/jsm/modules/Makefile	Mon Dec 17 21:09:13 2001
++++ jabber-1.4.2/jsm/modules/Makefile	Tue Apr 29 11:29:07 2003
+@@ -24,7 +24,8 @@
+ 	mod_register.o \
+ 	mod_log.o \
+ 	mod_last.o \
+-	mod_offline.o
++	mod_offline.o \
++	mod_disco.o
+ 
+ $(jsm_modules_OBJECTS): $(jsm_modules_HEADERS)
+ 
+diff -durN jabber-1.4.2.orig/jsm/modules/mod_disco.c jabber-1.4.2/jsm/modules/mod_disco.c
+--- jabber-1.4.2.orig/jsm/modules/mod_disco.c	Thu Jan  1 01:00:00 1970
++++ jabber-1.4.2/jsm/modules/mod_disco.c	Tue Apr 29 11:29:07 2003
+@@ -0,0 +1,129 @@
++/* --------------------------------------------------------------------------
++ *
++ * License
++ *
++ * The contents of this file are subject to the Jabber Open Source License
++ * Version 1.0 (the "JOSL").  You may not copy or use this file, in either
++ * source code or executable form, except in compliance with the JOSL. You
++ * may obtain a copy of the JOSL at http://www.jabber.org/ or at
++ * http://www.opensource.org/.  
++ *
++ * Software distributed under the JOSL is distributed on an "AS IS" basis,
++ * WITHOUT WARRANTY OF ANY KIND, either express or implied.  See the JOSL
++ * for the specific language governing rights and limitations under the
++ * JOSL.
++ *
++ * Copyrights
++ * 
++ * Portions created by or assigned to Jabber.com, Inc. are 
++ * Copyright (c) 1999-2002 Jabber.com, Inc.  All Rights Reserved.  Contact
++ * information for Jabber.com, Inc. is available at http://www.jabber.com/.
++ *
++ * Portions Copyright (c) 1998-1999 Jeremie Miller.
++ * 
++ * Acknowledgements
++ * 
++ * Special thanks to the Jabber Open Source Contributors for their
++ * suggestions and support of Jabber.
++ * 
++ * Alternatively, the contents of this file may be used under the terms of the
++ * GNU General Public License Version 2 or later (the "GPL"), in which case
++ * the provisions of the GPL are applicable instead of those above.  If you
++ * wish to allow use of your version of this file only under the terms of the
++ * GPL and not to allow others to use your version of this file under the JOSL,
++ * indicate your decision by deleting the provisions above and replace them
++ * with the notice and other provisions required by the GPL.  If you do not
++ * delete the provisions above, a recipient may use your version of this file
++ * under either the JOSL or the GPL. 
++ * 
++ * 
++ * --------------------------------------------------------------------------*/
++#include "jsm.h"
++
++mreturn mod_disco_server_info(mapi m, void *arg)
++{
++    xmlnode query, identity, disco;
++
++    /* skip disco request for non-null nodes */
++    if((xmlnode_get_attrib(m->packet->x,"node")) != NULL)
++        return M_PASS;
++        
++    log_debug("mod_disco","handling disco#info query");
++    
++    /* get data from the config file */
++    disco = js_config(m->si,"disco");
++
++    /* build the result IQ */
++    query = xmlnode_insert_tag(jutil_iqresult(m->packet->x),"query");
++    xmlnode_put_attrib(query,"xmlns",NS_DISCO_INFO);
++
++    if (disco != NULL) identity = xmlnode_get_tag(disco,"identity");
++    
++    if (disco == NULL || identity == NULL){
++            identity = xmlnode_insert_tag(query,"identity");
++            xmlnode_put_attrib(identity,"category","x-services");
++            xmlnode_put_attrib(identity,"type","x-jabber");
++            xmlnode_put_attrib(identity,"name",xmlnode_get_data(js_config(m->si,"vCard/FN"))); /* pull name from the server vCard */
++    }
++    
++    if (disco != NULL) xmlnode_insert_node(query,xmlnode_get_firstchild(disco));
++
++    jpacket_reset(m->packet);
++    js_deliver(m->si,m->packet);
++
++    return M_HANDLED;
++}
++
++
++mreturn mod_disco_server_items(mapi m, void *arg)
++{
++    xmlnode browse, query, x, item;
++    const char *jid,*name;
++
++    /* skip disco request for non-null nodes */
++    if((xmlnode_get_attrib(m->packet->x,"node")) != NULL)
++        return M_PASS;
++        
++    /* get data from the config file */
++    if((browse = js_config(m->si,"browse")) == NULL)
++        return M_PASS;
++
++    log_debug("mod_disco","handling disco#items query");
++
++    /* build the result IQ */
++    query = xmlnode_insert_tag(jutil_iqresult(m->packet->x),"query");
++    xmlnode_put_attrib(query,"xmlns",NS_DISCO_ITEMS);
++
++    /* copy in the configured services */
++    for(x=xmlnode_get_firstchild(browse);x;x=xmlnode_get_nextsibling(x)){
++        jid=xmlnode_get_attrib(x,"jid");
++        if (!jid) continue;
++        item=xmlnode_insert_tag(query,"item");
++        xmlnode_put_attrib(item,"jid",jid);
++        name=xmlnode_get_attrib(x,"name");
++        if (name) xmlnode_put_attrib(item,"name",name);
++    }
++
++    jpacket_reset(m->packet);
++    js_deliver(m->si,m->packet);
++
++    return M_HANDLED;
++}
++
++mreturn mod_disco_server(mapi m, void *arg)
++{
++    if (m->packet->type != JPACKET_IQ) return M_IGNORE;
++    if (jpacket_subtype(m->packet) != JPACKET__GET || m->packet->to->resource != NULL) return M_PASS;
++    if (NSCHECK(m->packet->iq,NS_DISCO_ITEMS)) return mod_disco_server_items(m,arg);
++    if (NSCHECK(m->packet->iq,NS_DISCO_INFO)) return mod_disco_server_info(m,arg);
++    return M_PASS;
++}
++
++void mod_disco(jsmi si)
++{
++    js_mapi_register(si,e_SERVER,mod_disco_server,NULL);
++}
++
++/*
++ * vi: tabstop=4 et
++ */
