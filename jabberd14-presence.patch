@@ -1,0 +1,31 @@
+
+date: 2002/04/09 20:41:38;  author: jer;  state: Exp;  lines: +3 -2
+fix for a crasher protocol bug with invisible support and strange errors
+
+Index: jsm/modules/mod_presence.c
+===================================================================
+RCS file: /home/cvs/jabberd14/jsm/modules/mod_presence.c,v
+retrieving revision 1.25
+retrieving revision 1.26
+diff -u -r1.25 -r1.26
+--- jsm/modules/mod_presence.c	8 Feb 2002 07:44:17 -0000	1.25
++++ jsm/modules/mod_presence.c	9 Apr 2002 20:41:38 -0000	1.26
+@@ -167,7 +167,7 @@
+         return M_HANDLED;
+     }
+ 
+-    if(jid_cmp(m->packet->from,m->s->id) == 0)
++    if(m->packet->from == NULL || jid_cmp(m->packet->from,m->s->id) == 0)
+     { /* this is our presence, don't send to ourselves */
+         xmlnode_free(m->packet->x);
+         return M_HANDLED;
+@@ -293,7 +293,8 @@
+ 
+         /* reset vars */
+         mp->invisible = 0;
+-        mp->A->next = NULL;
++        if(mp->A != NULL)
++            mp->A->next = NULL;
+         mp->I = NULL;
+ 
+         xmlnode_free(m->packet->x);

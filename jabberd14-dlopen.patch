@@ -1,0 +1,13 @@
+Index: jabberd/load.c
+===================================================================
+RCS file: /home/cvs/jabberd14/jabberd/load.c,v
+retrieving revision 1.25
+retrieving revision 1.26
+diff -r1.25 -r1.26
+126,127c126
+<     dlerr = dlerror();
+<     if(dlerr != NULL)
+---
+>     if(!so_h)
+128a128
+>         dlerr = dlerror();
