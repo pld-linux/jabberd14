@@ -38,13 +38,11 @@ URL:		http://www.jabber.org/
 BuildRequires:	pth-devel
 BuildRequires:	openssl-devel >= 0.9.7
 PreReq:		rc-scripts
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
+Requires(pre):	jabber-common
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Obsoletes:	jabber
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -120,13 +118,13 @@ JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_sbindir},/etc/{rc.d/init.d,sysconfig}} \
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/jabber,%{_sbindir},/etc/{rc.d/init.d,sysconfig}} \
 	$RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/spool \
 	$RPM_BUILD_ROOT{/var/log/%{name},%{_libdir}/%{name}} \
 	$RPM_BUILD_ROOT%{_includedir}/%{name}/lib
 
 install jabberd/jabberd $RPM_BUILD_ROOT%{_sbindir}/%{name}
-install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}/jabber/jabberd14.xml
 install xdb_file/xdb_file.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install pthsock/pthsock_client.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install jsm/jsm.so $RPM_BUILD_ROOT%{_libdir}/%{name}
@@ -142,14 +140,6 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ "$1" = 1 ] ; then
-	if [ ! -n "`getgid jabber`" ]; then
-		/usr/sbin/groupadd -f -g 74 jabber
-	fi
-	if [ ! -n "`id -u jabber 2>/dev/null`" ]; then
-		/usr/sbin/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
-	fi
-fi
 
 %post server
 /sbin/chkconfig --add %{name}
@@ -177,11 +167,10 @@ fi
 %{_libdir}/%{name}/*.so
 %attr(771,root,jabber) %{_localstatedir}/lib/%{name}
 %attr(770,root,jabber) /var/log/%{name}
-%dir %{_sysconfdir}/%{name}
 
 %files server
 %defattr(644,root,root,755)
-%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.xml
+%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/jabber/*.xml
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
 
