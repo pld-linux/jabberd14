@@ -38,26 +38,26 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
 -      <mod_log>./jsm/jsm.so</mod_log>
 -      <mod_register>./jsm/jsm.so</mod_register>
 -      <mod_xml>./jsm/jsm.so</mod_xml>
-+      <jsm>/usr/lib/jabber/jsm.so</jsm>
-+      <mod_echo>/usr/lib/jabber/jsm.so</mod_echo>
-+      <mod_roster>/usr/lib/jabber/jsm.so</mod_roster>
-+      <mod_time>/usr/lib/jabber/jsm.so</mod_time>
-+      <mod_vcard>/usr/lib/jabber/jsm.so</mod_vcard>
-+      <mod_last>/usr/lib/jabber/jsm.so</mod_last>
-+      <mod_version>/usr/lib/jabber/jsm.so</mod_version>
-+      <mod_announce>/usr/lib/jabber/jsm.so</mod_announce>
-+      <mod_agents>/usr/lib/jabber/jsm.so</mod_agents>
-+      <mod_browse>/usr/lib/jabber/jsm.so</mod_browse>
-+      <mod_admin>/usr/lib/jabber/jsm.so</mod_admin>
-+      <mod_filter>/usr/lib/jabber/jsm.so</mod_filter>
-+      <mod_offline>/usr/lib/jabber/jsm.so</mod_offline>
-+      <mod_presence>/usr/lib/jabber/jsm.so</mod_presence>
-+      <mod_auth_plain>/usr/lib/jabber/jsm.so</mod_auth_plain>
-+      <mod_auth_digest>/usr/lib/jabber/jsm.so</mod_auth_digest>
-+      <mod_auth_0k>/usr/lib/jabber/jsm.so</mod_auth_0k>
-+      <mod_log>/usr/lib/jabber/jsm.so</mod_log>
-+      <mod_register>/usr/lib/jabber/jsm.so</mod_register>
-+      <mod_xml>/usr/lib/jabber/jsm.so</mod_xml>
++      <jsm>/usr/lib/jabberd/jsm.so</jsm>
++      <mod_echo>/usr/lib/jabberd/jsm.so</mod_echo>
++      <mod_roster>/usr/lib/jabberd/jsm.so</mod_roster>
++      <mod_time>/usr/lib/jabberd/jsm.so</mod_time>
++      <mod_vcard>/usr/lib/jabberd/jsm.so</mod_vcard>
++      <mod_last>/usr/lib/jabberd/jsm.so</mod_last>
++      <mod_version>/usr/lib/jabberd/jsm.so</mod_version>
++      <mod_announce>/usr/lib/jabberd/jsm.so</mod_announce>
++      <mod_agents>/usr/lib/jabberd/jsm.so</mod_agents>
++      <mod_browse>/usr/lib/jabberd/jsm.so</mod_browse>
++      <mod_admin>/usr/lib/jabberd/jsm.so</mod_admin>
++      <mod_filter>/usr/lib/jabberd/jsm.so</mod_filter>
++      <mod_offline>/usr/lib/jabberd/jsm.so</mod_offline>
++      <mod_presence>/usr/lib/jabberd/jsm.so</mod_presence>
++      <mod_auth_plain>/usr/lib/jabberd/jsm.so</mod_auth_plain>
++      <mod_auth_digest>/usr/lib/jabberd/jsm.so</mod_auth_digest>
++      <mod_auth_0k>/usr/lib/jabberd/jsm.so</mod_auth_0k>
++      <mod_log>/usr/lib/jabberd/jsm.so</mod_log>
++      <mod_register>/usr/lib/jabberd/jsm.so</mod_register>
++      <mod_xml>/usr/lib/jabberd/jsm.so</mod_xml>
      </load>
  
    </service>
@@ -66,7 +66,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
      <host/>
      <load>
 -      <xdb_file>./xdb_file/xdb_file.so</xdb_file>
-+      <xdb_file>/usr/lib/jabber/xdb_file.so</xdb_file>
++      <xdb_file>/usr/lib/jabberd/xdb_file.so</xdb_file>
      </load>
      <xdb_file xmlns="jabber:config:xdb_file">
 -      <spool><jabberd:cmdline flag='s'>./spool</jabberd:cmdline></spool>
@@ -79,7 +79,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
    <service id="c2s">
      <load>
 -      <pthsock_client>./pthsock/pthsock_client.so</pthsock_client>
-+      <pthsock_client>/usr/lib/jabber/pthsock_client.so</pthsock_client>
++      <pthsock_client>/usr/lib/jabberd/pthsock_client.so</pthsock_client>
      </load>
      <pthcsock xmlns='jabber:config:pth-csock'>
        <authtime/>
@@ -106,7 +106,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
      <host/>
      <load>
 -      <dnsrv>./dnsrv/dnsrv.so</dnsrv>
-+      <dnsrv>/usr/lib/jabber/dnsrv.so</dnsrv>
++      <dnsrv>/usr/lib/jabberd/dnsrv.so</dnsrv>
      </load>
      <dnsrv xmlns="jabber:config:dnsrv">
      	<resend service="_jabber._tcp">s2s</resend> <!-- for supporting SRV records -->
@@ -115,7 +115,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
    <service id="s2s">
      <load>
 -      <dialback>./dialback/dialback.so</dialback>
-+      <dialback>/usr/lib/jabber/dialback.so</dialback>
++      <dialback>/usr/lib/jabberd/dialback.so</dialback>
      </load>
      <dialback xmlns='jabber:config:dialback'>
        <legacy/>
