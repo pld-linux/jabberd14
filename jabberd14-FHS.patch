@@ -123,7 +123,7 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
    This specifies the file to store the pid of the process in.
    -->
 -  <pidfile>./jabber.pid</pidfile>
-+  <pidfile>/var/lib/jabberd14/jabber.pid</pidfile>
++  <pidfile>/var/run/jabber/jabberd14.pid</pidfile>
  
  
  </jabber>
@@ -135,7 +135,7 @@ diff -durN jabber-1.4.2.orig/jabberd/config.c jabber-1.4.2/jabberd/config.c
  int configurate(char *file)
  {
 -    char def[] = "jabber.xml";
-+    char def[] = "/etc/jabber.xml";
++    char def[] = "/etc/jabber/jabberd14.xml";
      char *realfile = (char *)def;
      xmlnode incl;
      char *c;

@@ -32,7 +32,7 @@ case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/jabberd14 ]; then
 		msg_starting "Jabber server"
-		daemon jabberd14 -c /etc/jabberd14/jabber.xml -B -U jabber -G jabber
+		daemon jabberd14 -c /etc/jabber/jabberd14.xml -B -U jabber -G jabber
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/jabberd14
 	else
