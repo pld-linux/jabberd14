@@ -6,7 +6,7 @@ Summary:	Old "jabber.org" Jabber server daemon
 Summary(pl):	Stary serwer Jabbera "z jabber.org"
 Name:		jabberd14
 Version:	1.4.2
-Release:	1
+Release:	2
 License:	distributable
 Group:		Applications/Communications
 Source0:	http://download.jabber.org/dists/1.4/final/jabber-%{version}.tar.gz
