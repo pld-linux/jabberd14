@@ -1,0 +1,85 @@
+This patch allows to disable new users registration still leaving 
+password change and unregistration enabled.
+To use it add "deny_new" attribute to <register/> element in jabber.xml
+
+diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
+--- jabber-1.4.2.orig/jabber.xml	Tue Apr 29 11:38:39 2003
++++ jabber-1.4.2/jabber.xml	Tue Apr 29 11:40:14 2003
+@@ -124,9 +124,12 @@
+       Registration instructions and required fields. The 
+       notify attribute will send the server administrator(s)
+       a message after each valid registration if it is set
+-      to "yes".
++      to "yes". A deny_new attribute will disable registration
++      for new users, but password change and unregistration
++      will still be enabled.
+       -->
+ 
++      <!-- <register deny_new="yes"> -->
+       <register notify="yes">
+         <instructions>Choose a username and password to register with this server.</instructions>
+         <name/>
+diff -durN jabber-1.4.2.orig/jsm/modules/mod_auth_0k.c jabber-1.4.2/jsm/modules/mod_auth_0k.c
+--- jabber-1.4.2.orig/jsm/modules/mod_auth_0k.c	Fri Feb  8 08:39:28 2002
++++ jabber-1.4.2/jsm/modules/mod_auth_0k.c	Tue Apr 29 11:39:01 2003
+@@ -226,6 +226,16 @@
+     return M_PASS;
+ }
+ 
++mreturn mod_auth_0k_reg_new(mapi m, void *arg)
++{
++    xmlnode reg;
++
++    if((reg = js_config(m->si, "register")) == NULL) return M_PASS;
++    if(xmlnode_get_attrib(reg,"deny_new") != NULL) return M_PASS;
++    return mod_auth_0k_reg(m,arg);
++}
++
++
+ /* handle password change requests from a session */
+ mreturn mod_auth_0k_server(mapi m, void *arg)
+ {
+@@ -256,5 +266,5 @@
+ 
+     js_mapi_register(si, e_AUTH, mod_auth_0k_go, enable);
+     js_mapi_register(si, e_SERVER, mod_auth_0k_server, NULL);
+-    if (js_config(si,"register") != NULL) js_mapi_register(si, e_REGISTER, mod_auth_0k_reg, NULL);
++    js_mapi_register(si, e_REGISTER, mod_auth_0k_reg_new, NULL);
+ }
+diff -durN jabber-1.4.2.orig/jsm/modules/mod_auth_plain.c jabber-1.4.2/jsm/modules/mod_auth_plain.c
+--- jabber-1.4.2.orig/jsm/modules/mod_auth_plain.c	Fri Feb  8 08:39:28 2002
++++ jabber-1.4.2/jsm/modules/mod_auth_plain.c	Tue Apr 29 11:39:01 2003
+@@ -112,6 +112,15 @@
+     return M_PASS;
+ }
+ 
++mreturn mod_auth_plain_reg_new(mapi m, void *arg)
++{
++    xmlnode reg;
++
++    if((reg = js_config(m->si, "register")) == NULL) return M_PASS;
++    if(xmlnode_get_attrib(reg,"deny_new") != NULL) return M_PASS;
++    return mod_auth_plain_reg(m,arg);
++}
++
+ /* handle password change requests from a session */
+ mreturn mod_auth_plain_server(mapi m, void *arg)
+ {
+@@ -136,5 +145,5 @@
+ 
+     js_mapi_register(si, e_AUTH, mod_auth_plain_jane, NULL);
+     js_mapi_register(si, e_SERVER, mod_auth_plain_server, NULL);
+-    if (js_config(si,"register") != NULL) js_mapi_register(si, e_REGISTER, mod_auth_plain_reg, NULL);
++    js_mapi_register(si, e_REGISTER, mod_auth_plain_reg_new, NULL);
+ }
+diff -durN jabber-1.4.2.orig/jsm/modules/mod_register.c jabber-1.4.2/jsm/modules/mod_register.c
+--- jabber-1.4.2.orig/jsm/modules/mod_register.c	Fri Feb  8 08:39:29 2002
++++ jabber-1.4.2/jsm/modules/mod_register.c	Tue Apr 29 11:39:01 2003
+@@ -45,6 +45,7 @@
+     xmlnode reg, x;
+ 
+     if((reg = js_config(m->si, "register")) == NULL) return M_PASS;
++    if(xmlnode_get_attrib(reg,"deny_new") != NULL) return M_PASS;
+ 
+     log_debug("mod_register","checking");
+ 
