@@ -5,14 +5,6 @@ Version:	1.4.2
 Release:	1
 License:	distributable
 Group:		Applications/Communications
-Group(cs):	Aplikace/Komunikace
-Group(de):	Anwendungen/Kommunikation
-Group(es):	Aplicaciones/Comunicaciones
-Group(fr):	Applications/Transmissions
-Group(ja):	¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/ÄÌ¿®
-Group(pl):	Aplikacje/Komunikacja
-Group(pt):	Aplicações/Comunicações
-Group(ru):	ğÒÉÌÏÖÅÎÉÑ/ó×ÑÚØ
 Source0:	http://download.jabber.org/dists/1.4/final/%{name}-%{version}.tar.gz
 Source1:	http://docs.jabber.org/no-sgml/howto-1.4.html
 Source2:	%{name}d.init
@@ -37,16 +29,6 @@ serwerów, do przekazywania danych pomiêdzy nimi i klientami Jabber.
 Summary:	Header and library files for Jabber development
 Summary(pl):	Pliki nag³ówkowe i biblioteki dla tworzenia us³ug Jabber
 Group:		Development/Libraries
-Group(cs):	Vıvojové prostøedky/Knihovny
-Group(de):	Entwicklung/Bibliotheken
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(ja):	³«È¯/¥é¥¤¥Ö¥é¥ê
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(pt):	Desenvolvimento/Bibliotecas
-Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
-Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name} = %{version}
 
 %description devel
