@@ -6,7 +6,7 @@ Summary:	Jabber messaging system server
 Summary(pl):	Serwer systemu powiadamiania Jabber
 Name:		jabber
 Version:	1.4.2
-Release:	5
+Release:	6
 License:	distributable
 Group:		Applications/Communications
 Source0:	http://download.jabber.org/dists/1.4/final/%{name}-%{version}.tar.gz
@@ -15,6 +15,9 @@ Source2:	%{name}d.init
 Source3:	%{name}d.sysconfig
 Patch0:		%{name}-FHS.patch
 Patch1:		%{name}-ssl_dos_fix.patch
+Patch2:		%{name}-mod_disco.patch
+Patch3:		%{name}-mod_stats.patch
+Patch4:		%{name}-register-deny_new.patch
 # Patches from jabberd CVS follow
 Patch10:	%{name}-IPv6.patch
 Patch11:	%{name}-SRV.patch
@@ -62,6 +65,9 @@ Jabber.
 %setup  -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %patch10 -p0
 %patch11 -p0
