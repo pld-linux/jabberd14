@@ -23,10 +23,10 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
  
      <!--
 @@ -318,6 +330,7 @@
-       <mod_register>/usr/lib/jabberd/jsm.so</mod_register>
-       <mod_xml>/usr/lib/jabberd/jsm.so</mod_xml>
-       <mod_disco>/usr/lib/jabberd/jsm.so</mod_disco>
-+      <mod_stats>/usr/lib/jabberd/jsm.so</mod_stats>
+       <mod_register>/usr/lib/jabberd14/jsm.so</mod_register>
+       <mod_xml>/usr/lib/jabberd14/jsm.so</mod_xml>
+       <mod_disco>/usr/lib/jabberd14/jsm.so</mod_disco>
++      <mod_stats>/usr/lib/jabberd14/jsm.so</mod_stats>
      </load>
  
    </service>

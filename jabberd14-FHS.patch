@@ -1,6 +1,6 @@
-diff -dur jabber-1.4.1.orig/configure jabber-1.4.1/configure
---- jabber-1.4.1.orig/configure	Sat Feb  3 06:06:24 2001
-+++ jabber-1.4.1/configure	Wed Dec 19 17:47:21 2001
+diff -durN jabber-1.4.2.orig/configure jabber-1.4.2/configure
+--- jabber-1.4.2.orig/configure	Mon Feb 11 20:14:06 2002
++++ jabber-1.4.2/configure	Sun Sep 14 17:19:50 2003
 @@ -32,7 +32,7 @@
  LDFLAGS="$LDFLAGS"
  LIBS="$LIBS"
@@ -10,10 +10,9 @@ diff -dur jabber-1.4.1.orig/configure jabber-1.4.1/configure
  
  ##
  # Print a cool header
-Only in jabber-1.4.1: howto-1.4.html
-diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
---- jabber-1.4.1.orig/jabber.xml	Mon Feb  5 23:19:20 2001
-+++ jabber-1.4.1/jabber.xml	Wed Dec 19 17:48:10 2001
+diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
+--- jabber-1.4.2.orig/jabber.xml	Tue May 15 17:21:56 2001
++++ jabber-1.4.2/jabber.xml	Sun Sep 14 17:20:32 2003
 @@ -264,26 +264,26 @@
      -->
  
@@ -38,26 +37,26 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
 -      <mod_log>./jsm/jsm.so</mod_log>
 -      <mod_register>./jsm/jsm.so</mod_register>
 -      <mod_xml>./jsm/jsm.so</mod_xml>
-+      <jsm>/usr/lib/jabberd/jsm.so</jsm>
-+      <mod_echo>/usr/lib/jabberd/jsm.so</mod_echo>
-+      <mod_roster>/usr/lib/jabberd/jsm.so</mod_roster>
-+      <mod_time>/usr/lib/jabberd/jsm.so</mod_time>
-+      <mod_vcard>/usr/lib/jabberd/jsm.so</mod_vcard>
-+      <mod_last>/usr/lib/jabberd/jsm.so</mod_last>
-+      <mod_version>/usr/lib/jabberd/jsm.so</mod_version>
-+      <mod_announce>/usr/lib/jabberd/jsm.so</mod_announce>
-+      <mod_agents>/usr/lib/jabberd/jsm.so</mod_agents>
-+      <mod_browse>/usr/lib/jabberd/jsm.so</mod_browse>
-+      <mod_admin>/usr/lib/jabberd/jsm.so</mod_admin>
-+      <mod_filter>/usr/lib/jabberd/jsm.so</mod_filter>
-+      <mod_offline>/usr/lib/jabberd/jsm.so</mod_offline>
-+      <mod_presence>/usr/lib/jabberd/jsm.so</mod_presence>
-+      <mod_auth_plain>/usr/lib/jabberd/jsm.so</mod_auth_plain>
-+      <mod_auth_digest>/usr/lib/jabberd/jsm.so</mod_auth_digest>
-+      <mod_auth_0k>/usr/lib/jabberd/jsm.so</mod_auth_0k>
-+      <mod_log>/usr/lib/jabberd/jsm.so</mod_log>
-+      <mod_register>/usr/lib/jabberd/jsm.so</mod_register>
-+      <mod_xml>/usr/lib/jabberd/jsm.so</mod_xml>
++      <jsm>/usr/lib/jabberd14/jsm.so</jsm>
++      <mod_echo>/usr/lib/jabberd14/jsm.so</mod_echo>
++      <mod_roster>/usr/lib/jabberd14/jsm.so</mod_roster>
++      <mod_time>/usr/lib/jabberd14/jsm.so</mod_time>
++      <mod_vcard>/usr/lib/jabberd14/jsm.so</mod_vcard>
++      <mod_last>/usr/lib/jabberd14/jsm.so</mod_last>
++      <mod_version>/usr/lib/jabberd14/jsm.so</mod_version>
++      <mod_announce>/usr/lib/jabberd14/jsm.so</mod_announce>
++      <mod_agents>/usr/lib/jabberd14/jsm.so</mod_agents>
++      <mod_browse>/usr/lib/jabberd14/jsm.so</mod_browse>
++      <mod_admin>/usr/lib/jabberd14/jsm.so</mod_admin>
++      <mod_filter>/usr/lib/jabberd14/jsm.so</mod_filter>
++      <mod_offline>/usr/lib/jabberd14/jsm.so</mod_offline>
++      <mod_presence>/usr/lib/jabberd14/jsm.so</mod_presence>
++      <mod_auth_plain>/usr/lib/jabberd14/jsm.so</mod_auth_plain>
++      <mod_auth_digest>/usr/lib/jabberd14/jsm.so</mod_auth_digest>
++      <mod_auth_0k>/usr/lib/jabberd14/jsm.so</mod_auth_0k>
++      <mod_log>/usr/lib/jabberd14/jsm.so</mod_log>
++      <mod_register>/usr/lib/jabberd14/jsm.so</mod_register>
++      <mod_xml>/usr/lib/jabberd14/jsm.so</mod_xml>
      </load>
  
    </service>
@@ -66,11 +65,11 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
      <host/>
      <load>
 -      <xdb_file>./xdb_file/xdb_file.so</xdb_file>
-+      <xdb_file>/usr/lib/jabberd/xdb_file.so</xdb_file>
++      <xdb_file>/usr/lib/jabberd14/xdb_file.so</xdb_file>
      </load>
      <xdb_file xmlns="jabber:config:xdb_file">
 -      <spool><jabberd:cmdline flag='s'>./spool</jabberd:cmdline></spool>
-+      <spool><jabberd:cmdline flag='s'>/var/lib/jabber/spool</jabberd:cmdline></spool>
++      <spool><jabberd:cmdline flag='s'>/var/lib/jabberd14/spool</jabberd:cmdline></spool>
      </xdb_file>
    </xdb>
  
@@ -79,7 +78,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
    <service id="c2s">
      <load>
 -      <pthsock_client>./pthsock/pthsock_client.so</pthsock_client>
-+      <pthsock_client>/usr/lib/jabberd/pthsock_client.so</pthsock_client>
++      <pthsock_client>/usr/lib/jabberd14/pthsock_client.so</pthsock_client>
      </load>
      <pthcsock xmlns='jabber:config:pth-csock'>
        <authtime/>
@@ -88,7 +87,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
      <logtype/>
      <format>%d: [%t] (%h): %s</format>
 -    <file>error.log</file>
-+    <file>/var/log/jabber/error.log</file>
++    <file>/var/log/jabberd14/error.log</file>
      <stderr/>
    </log>
  
@@ -97,7 +96,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
      <logtype>record</logtype>
      <format>%d %h %s</format>
 -    <file>record.log</file>
-+    <file>/var/log/jabber/record.log</file>
++    <file>/var/log/jabberd14/record.log</file>
    </log>
  
    <!-- The following two services are for handling server-to-server traffic. -->
@@ -106,7 +105,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
      <host/>
      <load>
 -      <dnsrv>./dnsrv/dnsrv.so</dnsrv>
-+      <dnsrv>/usr/lib/jabberd/dnsrv.so</dnsrv>
++      <dnsrv>/usr/lib/jabberd14/dnsrv.so</dnsrv>
      </load>
      <dnsrv xmlns="jabber:config:dnsrv">
      	<resend service="_jabber._tcp">s2s</resend> <!-- for supporting SRV records -->
@@ -115,7 +114,7 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
    <service id="s2s">
      <load>
 -      <dialback>./dialback/dialback.so</dialback>
-+      <dialback>/usr/lib/jabberd/dialback.so</dialback>
++      <dialback>/usr/lib/jabberd14/dialback.so</dialback>
      </load>
      <dialback xmlns='jabber:config:dialback'>
        <legacy/>
@@ -124,19 +123,19 @@ diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
    This specifies the file to store the pid of the process in.
    -->
 -  <pidfile>./jabber.pid</pidfile>
-+  <pidfile>/var/lib/jabber/jabber.pid</pidfile>
++  <pidfile>/var/lib/jabberd14/jabber.pid</pidfile>
  
  
  </jabber>
-diff -dur jabber-1.4.1.orig/jabberd/config.c jabber-1.4.1/jabberd/config.c
---- jabber-1.4.1.orig/jabberd/config.c	Thu Feb  1 21:46:49 2001
-+++ jabber-1.4.1/jabberd/config.c	Wed Dec 19 17:45:42 2001
-@@ -160,7 +160,7 @@
+diff -durN jabber-1.4.2.orig/jabberd/config.c jabber-1.4.2/jabberd/config.c
+--- jabber-1.4.2.orig/jabberd/config.c	Fri Feb  8 08:39:26 2002
++++ jabber-1.4.2/jabberd/config.c	Sun Sep 14 17:19:50 2003
+@@ -174,7 +174,7 @@
  
  int configurate(char *file)
  {
 -    char def[] = "jabber.xml";
 +    char def[] = "/etc/jabber.xml";
      char *realfile = (char *)def;
- 
-     /* if no file name is specified, fall back to the default file */
+     xmlnode incl;
+     char *c;
