@@ -1,15 +1,6 @@
---- jabber-1.4.2/xdb_file/Makefile.orig	Sat Jan 13 23:06:56 2001
-+++ jabber-1.4.2/xdb_file/Makefile	Mon Oct 13 14:54:40 2003
-@@ -1,6 +1,6 @@
- include ../platform-settings
- 
--CFLAGS:=$(CFLAGS) -I../jabberd
-+CFLAGS:=$(CCFLAGS) -I../jabberd
- 
- xdb_file_OBJECTS=xdb_file.o
- 
---- jabber-1.4.2/jabberd/lib/Makefile.orig	Sun Jan 28 11:18:17 2001
-+++ jabber-1.4.2/jabberd/lib/Makefile	Mon Oct 13 14:54:56 2003
+diff -durN -x '*~' -x '*.orig' -x '*.rej' jabberd-1.4.3.orig/jabberd/lib/Makefile jabberd-1.4.3/jabberd/lib/Makefile
+--- jabberd-1.4.3.orig/jabberd/lib/Makefile	2003-10-27 20:16:50.000000000 +0100
++++ jabberd-1.4.3/jabberd/lib/Makefile	2004-01-03 12:24:49.323640177 +0100
 @@ -3,7 +3,7 @@
  #
  include ../../platform-settings

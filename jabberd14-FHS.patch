@@ -1,7 +1,7 @@
-diff -durN jabber-1.4.2.orig/configure jabber-1.4.2/configure
---- jabber-1.4.2.orig/configure	Mon Feb 11 20:14:06 2002
-+++ jabber-1.4.2/configure	Sun Sep 14 17:19:50 2003
-@@ -32,7 +32,7 @@
+diff -durN -x '*~' -x '*.rej' -x '*.orig' jabberd-1.4.3.orig/configure jabberd-1.4.3/configure
+--- jabberd-1.4.3.orig/configure	2003-11-08 00:50:51.000000000 +0100
++++ jabberd-1.4.3/configure	2004-01-03 12:04:20.040907787 +0100
+@@ -35,7 +35,7 @@
  LDFLAGS="$LDFLAGS"
  LIBS="$LIBS"
  XLDFLAGS="$XLDFLAGS "
@@ -10,10 +10,10 @@ diff -durN jabber-1.4.2.orig/configure jabber-1.4.2/configure
  
  ##
  # Print a cool header
-diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
---- jabber-1.4.2.orig/jabber.xml	Tue May 15 17:21:56 2001
-+++ jabber-1.4.2/jabber.xml	Sun Sep 14 17:20:32 2003
-@@ -264,26 +264,26 @@
+diff -durN -x '*~' -x '*.rej' -x '*.orig' jabberd-1.4.3.orig/jabber.xml jabberd-1.4.3/jabber.xml
+--- jabberd-1.4.3.orig/jabber.xml	2003-11-13 19:53:46.000000000 +0100
++++ jabberd-1.4.3/jabber.xml	2004-01-03 12:05:58.673565435 +0100
+@@ -295,21 +295,21 @@
      -->
  
      <load main="jsm">
@@ -27,45 +27,61 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
 -      <mod_announce>./jsm/jsm.so</mod_announce>
 -      <mod_agents>./jsm/jsm.so</mod_agents>
 -      <mod_browse>./jsm/jsm.so</mod_browse>
+-      <mod_disco>./jsm/jsm.so</mod_disco>
 -      <mod_admin>./jsm/jsm.so</mod_admin>
 -      <mod_filter>./jsm/jsm.so</mod_filter>
 -      <mod_offline>./jsm/jsm.so</mod_offline>
 -      <mod_presence>./jsm/jsm.so</mod_presence>
--      <mod_auth_plain>./jsm/jsm.so</mod_auth_plain>
++      <jsm>@libdir@/jabberd14/jsm.so</jsm>
++      <mod_echo>@libdir@/jabberd14/jsm.so</mod_echo>
++      <mod_roster>@libdir@/jabberd14/jsm.so</mod_roster>
++      <mod_time>@libdir@/jabberd14/jsm.so</mod_time>
++      <mod_vcard>@libdir@/jabberd14/jsm.so</mod_vcard>
++      <mod_last>@libdir@/jabberd14/jsm.so</mod_last>
++      <mod_version>@libdir@/jabberd14/jsm.so</mod_version>
++      <mod_announce>@libdir@/jabberd14/jsm.so</mod_announce>
++      <mod_agents>@libdir@/jabberd14/jsm.so</mod_agents>
++      <mod_browse>@libdir@/jabberd14/jsm.so</mod_browse>
++      <mod_disco>@libdir@/jabberd14/jsm.so</mod_disco>
++      <mod_admin>@libdir@/jabberd14/jsm.so</mod_admin>
++      <mod_filter>@libdir@/jabberd14/jsm.so</mod_filter>
++      <mod_offline>@libdir@/jabberd14/jsm.so</mod_offline>
++      <mod_presence>@libdir@/jabberd14/jsm.so</mod_presence>
+ 
+       <!--
+       Authentication
+@@ -325,19 +325,19 @@
+       -->
+       <!-- mod_auth_digest: Password in clear text in storage,
+            encrypted/hashed on the wire -->
 -      <mod_auth_digest>./jsm/jsm.so</mod_auth_digest>
--      <mod_auth_0k>./jsm/jsm.so</mod_auth_0k>
++      <mod_auth_digest>@libdir@/jabberd14/jsm.so</mod_auth_digest>
+       <!-- mod_auth_plain: Password in clear text in storage
+            and on the wire. Disable this if you do not use clients
+            that need plaintext auth -->
+-      <mod_auth_plain>./jsm/jsm.so</mod_auth_plain>
++      <mod_auth_plain>@libdir@/jabberd14/jsm.so</mod_auth_plain>
+       <!-- mod_auth_crypt: Password encrypted/hashed in storage,
+            clear text on the wire. Disabled as this only makes
+            sense when used exclusively and with SSL mandatory
+-      <mod_auth_crypt>./jsm/jsm.so</mod_auth_crypt> -->
++      <mod_auth_crypt>@libdir@/jabberd14/jsm.so</mod_auth_crypt> -->
+ 
 -      <mod_log>./jsm/jsm.so</mod_log>
 -      <mod_register>./jsm/jsm.so</mod_register>
 -      <mod_xml>./jsm/jsm.so</mod_xml>
-+      <jsm>/usr/lib/jabberd14/jsm.so</jsm>
-+      <mod_echo>/usr/lib/jabberd14/jsm.so</mod_echo>
-+      <mod_roster>/usr/lib/jabberd14/jsm.so</mod_roster>
-+      <mod_time>/usr/lib/jabberd14/jsm.so</mod_time>
-+      <mod_vcard>/usr/lib/jabberd14/jsm.so</mod_vcard>
-+      <mod_last>/usr/lib/jabberd14/jsm.so</mod_last>
-+      <mod_version>/usr/lib/jabberd14/jsm.so</mod_version>
-+      <mod_announce>/usr/lib/jabberd14/jsm.so</mod_announce>
-+      <mod_agents>/usr/lib/jabberd14/jsm.so</mod_agents>
-+      <mod_browse>/usr/lib/jabberd14/jsm.so</mod_browse>
-+      <mod_admin>/usr/lib/jabberd14/jsm.so</mod_admin>
-+      <mod_filter>/usr/lib/jabberd14/jsm.so</mod_filter>
-+      <mod_offline>/usr/lib/jabberd14/jsm.so</mod_offline>
-+      <mod_presence>/usr/lib/jabberd14/jsm.so</mod_presence>
-+      <mod_auth_plain>/usr/lib/jabberd14/jsm.so</mod_auth_plain>
-+      <mod_auth_digest>/usr/lib/jabberd14/jsm.so</mod_auth_digest>
-+      <mod_auth_0k>/usr/lib/jabberd14/jsm.so</mod_auth_0k>
-+      <mod_log>/usr/lib/jabberd14/jsm.so</mod_log>
-+      <mod_register>/usr/lib/jabberd14/jsm.so</mod_register>
-+      <mod_xml>/usr/lib/jabberd14/jsm.so</mod_xml>
++      <mod_log>@libdir@/jabberd14/jsm.so</mod_log>
++      <mod_register>@libdir@/jabberd14/jsm.so</mod_register>
++      <mod_xml>@libdir@/jabberd14/jsm.so</mod_xml>
      </load>
  
    </service>
-@@ -295,10 +295,10 @@
+@@ -353,10 +353,10 @@
    <xdb id="xdb">
      <host/>
      <load>
 -      <xdb_file>./xdb_file/xdb_file.so</xdb_file>
-+      <xdb_file>/usr/lib/jabberd14/xdb_file.so</xdb_file>
++      <xdb_file>@libdir@/jabberd14/xdb_file.so</xdb_file>
      </load>
      <xdb_file xmlns="jabber:config:xdb_file">
 -      <spool><jabberd:cmdline flag='s'>./spool</jabberd:cmdline></spool>
@@ -73,16 +89,16 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
      </xdb_file>
    </xdb>
  
-@@ -319,7 +319,7 @@
+@@ -387,7 +387,7 @@
  
    <service id="c2s">
      <load>
 -      <pthsock_client>./pthsock/pthsock_client.so</pthsock_client>
-+      <pthsock_client>/usr/lib/jabberd14/pthsock_client.so</pthsock_client>
++      <pthsock_client>@libdir@/jabberd14/pthsock_client.so</pthsock_client>
      </load>
      <pthcsock xmlns='jabber:config:pth-csock'>
        <authtime/>
-@@ -359,7 +359,7 @@
+@@ -430,7 +430,7 @@
      <host/>
      <logtype/>
      <format>%d: [%t] (%h): %s</format>
@@ -91,7 +107,7 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
      <stderr/>
    </log>
  
-@@ -372,7 +372,7 @@
+@@ -443,7 +443,7 @@
      <host/>
      <logtype>record</logtype>
      <format>%d %h %s</format>
@@ -100,25 +116,25 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
    </log>
  
    <!-- The following two services are for handling server-to-server traffic. -->
-@@ -382,7 +382,7 @@
+@@ -453,7 +453,7 @@
    <service id="dnsrv">
      <host/>
      <load>
 -      <dnsrv>./dnsrv/dnsrv.so</dnsrv>
-+      <dnsrv>/usr/lib/jabberd14/dnsrv.so</dnsrv>
++      <dnsrv>@libdir@/jabberd14/dnsrv.so</dnsrv>
      </load>
      <dnsrv xmlns="jabber:config:dnsrv">
-     	<resend service="_jabber._tcp">s2s</resend> <!-- for supporting SRV records -->
-@@ -401,7 +401,7 @@
+     	<resend service="_xmpp-server._tcp">s2s</resend> <!-- for supporting XMPP compliant SRV records -->
+@@ -473,7 +473,7 @@
  
    <service id="s2s">
      <load>
 -      <dialback>./dialback/dialback.so</dialback>
-+      <dialback>/usr/lib/jabberd14/dialback.so</dialback>
++      <dialback>@libdir@/jabberd14/dialback.so</dialback>
      </load>
      <dialback xmlns='jabber:config:dialback'>
        <legacy/>
-@@ -596,7 +596,7 @@
+@@ -668,7 +668,7 @@
    <!--
    This specifies the file to store the pid of the process in.
    -->
@@ -127,9 +143,9 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
  
  
  </jabber>
-diff -durN jabber-1.4.2.orig/jabberd/config.c jabber-1.4.2/jabberd/config.c
---- jabber-1.4.2.orig/jabberd/config.c	Fri Feb  8 08:39:26 2002
-+++ jabber-1.4.2/jabberd/config.c	Sun Sep 14 17:19:50 2003
+diff -durN -x '*~' -x '*.rej' -x '*.orig' jabberd-1.4.3.orig/jabberd/config.c jabberd-1.4.3/jabberd/config.c
+--- jabberd-1.4.3.orig/jabberd/config.c	2002-02-08 08:44:13.000000000 +0100
++++ jabberd-1.4.3/jabberd/config.c	2004-01-03 12:04:20.046905395 +0100
 @@ -174,7 +174,7 @@
  
  int configurate(char *file)

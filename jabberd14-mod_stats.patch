@@ -1,10 +1,10 @@
-diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
---- jabber-1.4.2.orig/jabber.xml	Tue Apr 29 11:33:58 2003
-+++ jabber-1.4.2/jabber.xml	Tue Apr 29 11:36:42 2003
-@@ -284,8 +284,20 @@
- 	<feature var="http://jabber.org/protocol/disco#info"/>
- 	<feature var="jabber:xdb:ginsert"/>
- 	<feature var="jabber:xdb:nslist"/>
+diff -durN -x '*~' -x '*.orig' -x '*.rej' jabberd-1.4.3.orig/jabber.xml jabberd-1.4.3/jabber.xml
+--- jabberd-1.4.3.orig/jabber.xml	2004-01-03 12:06:55.431925799 +0100
++++ jabberd-1.4.3/jabber.xml	2004-01-03 12:11:58.307115687 +0100
+@@ -260,8 +260,20 @@
+         <feature var='jabber:iq:time'/>
+         <feature var='jabber:iq:last'/>
+         <feature var='jabber:iq:version'/>
 +	<feature var="http://jabber.org/protocol/stats"/>
        </disco>
  
@@ -19,46 +19,38 @@ diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
 +	-->
 +      </stats>
 +
-     </jsm>
- 
-     <!--
-@@ -318,6 +330,7 @@
-       <mod_register>/usr/lib/jabberd14/jsm.so</mod_register>
-       <mod_xml>/usr/lib/jabberd14/jsm.so</mod_xml>
-       <mod_disco>/usr/lib/jabberd14/jsm.so</mod_disco>
-+      <mod_stats>/usr/lib/jabberd14/jsm.so</mod_stats>
-     </load>
- 
-   </service>
-diff -durN jabber-1.4.2.orig/jsm/Makefile jabber-1.4.2/jsm/Makefile
---- jabber-1.4.2.orig/jsm/Makefile	Tue Apr 29 11:33:58 2003
-+++ jabber-1.4.2/jsm/Makefile	Tue Apr 29 11:34:27 2003
-@@ -39,7 +39,8 @@
- 	modules/mod_log.o \
- 	modules/mod_last.o \
+       <!--
+       Select the hashing algorithm that mod_auth_crypt uses
+       for storing passwords
+diff -durN -x '*~' -x '*.orig' -x '*.rej' jabberd-1.4.3.orig/jsm/Makefile jabberd-1.4.3/jsm/Makefile
+--- jabberd-1.4.3.orig/jsm/Makefile	2003-11-07 16:42:00.000000000 +0100
++++ jabberd-1.4.3/jsm/Makefile	2004-01-03 12:12:54.507698536 +0100
+@@ -40,7 +40,8 @@
  	modules/mod_offline.o \
+ 	modules/mod_agents.o \
+ 	modules/mod_browse.o \
 -	modules/mod_disco.o
 +	modules/mod_disco.o \
-+	modules/mod_stats.o
++ 	modules/mod_stats.o
  
  SUBDIRS=modules
  
-diff -durN jabber-1.4.2.orig/jsm/modules/Makefile jabber-1.4.2/jsm/modules/Makefile
---- jabber-1.4.2.orig/jsm/modules/Makefile	Tue Apr 29 11:33:58 2003
-+++ jabber-1.4.2/jsm/modules/Makefile	Tue Apr 29 11:35:05 2003
-@@ -25,7 +25,8 @@
- 	mod_log.o \
- 	mod_last.o \
+diff -durN -x '*~' -x '*.orig' -x '*.rej' jabberd-1.4.3.orig/jsm/modules/Makefile jabberd-1.4.3/jsm/modules/Makefile
+--- jabberd-1.4.3.orig/jsm/modules/Makefile	2003-10-14 01:56:45.000000000 +0200
++++ jabberd-1.4.3/jsm/modules/Makefile	2004-01-03 12:14:40.268512922 +0100
+@@ -26,7 +26,8 @@
  	mod_offline.o \
+ 	mod_browse.o \
+ 	mod_agents.o \
 -	mod_disco.o
 +	mod_disco.o \
 +	mod_stats.o
  
  $(jsm_modules_OBJECTS): $(jsm_modules_HEADERS)
  
-diff -durN jabber-1.4.2.orig/jsm/modules/mod_stats.c jabber-1.4.2/jsm/modules/mod_stats.c
---- jabber-1.4.2.orig/jsm/modules/mod_stats.c	Thu Jan  1 01:00:00 1970
-+++ jabber-1.4.2/jsm/modules/mod_stats.c	Thu Apr 24 09:00:44 2003
+diff -durN -x '*~' -x '*.orig' -x '*.rej' jabberd-1.4.3.orig/jsm/modules/mod_stats.c jabberd-1.4.3/jsm/modules/mod_stats.c
+--- jabberd-1.4.3.orig/jsm/modules/mod_stats.c	1970-01-01 01:00:00.000000000 +0100
++++ jabberd-1.4.3/jsm/modules/mod_stats.c	2004-01-03 12:08:04.618328896 +0100
 @@ -0,0 +1,319 @@
 +/* 
 + * mod_stats - JEP-0039 (statistics gathering) by Jacek Konieczny

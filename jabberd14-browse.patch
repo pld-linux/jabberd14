@@ -1,11 +1,7 @@
-Index: jabber.xml
-===================================================================
-RCS file: /home/cvs/jabberd14/jabber.xml,v
-retrieving revision 1.65
-diff -u -r1.65 jabber.xml
---- jabber.xml	15 May 2001 15:21:56 -0000	1.65
-+++ jabber.xml	7 May 2003 09:23:04 -0000
-@@ -219,14 +219,14 @@
+diff -durN -x '*~' -x '*.orig' -x '*.rej' jabberd-1.4.3.orig/jabber.xml jabberd-1.4.3/jabber.xml
+--- jabberd-1.4.3.orig/jabber.xml	2004-01-03 12:19:35.927263605 +0100
++++ jabberd-1.4.3/jabber.xml	2004-01-03 12:22:42.962257513 +0100
+@@ -218,14 +218,14 @@
          <!-- 
          This is the default agent for the master Jabber User 
          Directory, a.k.a. "JUD", which is located at jabber.org.
@@ -23,39 +19,30 @@ diff -u -r1.65 jabber.xml
  
          <!--
          The following services are examples only, you will need to
-@@ -237,19 +237,19 @@
+@@ -236,17 +236,17 @@
  
          <!-- we're commenting these out, of course :)
- 
--        <conference type="private" jid="conference.localhost" name="Private Conferencing"/>
-+        <item category="conference" type="private" jid="conference.localhost" name="Private Conferencing"/>
  
 -        <service type="aim" jid="aim.localhost" name="AIM Transport">
 +        <item category="service" type="aim" jid="aim.localhost" name="AIM Transport">
            <ns>jabber:iq:gateway</ns>
            <ns>jabber:iq:register</ns>
--        </service>
-+        </item>
+         </service>
  
 -        <service type="yahoo" jid="yahoo.localhost" name="Yahoo! Transport">
 +        <item category="service" type="yahoo" jid="yahoo.localhost" name="Yahoo! Transport">
            <ns>jabber:iq:gateway</ns>
            <ns>jabber:iq:register</ns>
--        </service>
-+        </item>
+         </service>
  
 -        end of <service/> examples -->
 +        end of service examples -->
  
        </browse>
  
-Index: jsm/modules/mod_browse.c
-===================================================================
-RCS file: /home/cvs/jabberd14/jsm/modules/mod_browse.c,v
-retrieving revision 1.10
-diff -u -r1.10 mod_browse.c
---- jsm/modules/mod_browse.c	8 Feb 2002 07:44:17 -0000	1.10
-+++ jsm/modules/mod_browse.c	7 May 2003 09:23:05 -0000
+diff -durN -x '*~' -x '*.orig' -x '*.rej' jabberd-1.4.3.orig/jsm/modules/mod_browse.c jabberd-1.4.3/jsm/modules/mod_browse.c
+--- jabberd-1.4.3.orig/jsm/modules/mod_browse.c	2003-11-08 00:54:25.000000000 +0100
++++ jabberd-1.4.3/jsm/modules/mod_browse.c	2004-01-03 12:21:15.220930031 +0100
 @@ -52,7 +52,8 @@
      { /* no browse is set up yet, we must create one for this user! */
          if(id->resource == NULL)
@@ -87,10 +74,3 @@ diff -u -r1.10 mod_browse.c
      xmlnode_put_attrib(query,"type","jabber");
      xmlnode_put_attrib(query,"jid",m->packet->to->server);
      xmlnode_put_attrib(query,"name",xmlnode_get_data(js_config(m->si,"vCard/FN"))); /* pull name from the server vCard */
-@@ -247,4 +250,4 @@
-  * mass goes to read the directions on how to get soap out of it
- <mass> the thing is really complicated. I'm reminded of the lament cube from Hellraiser
- <mass> although I'm hoping I get soap instead of pinhead
--*/
-\ No newline at end of file
-+*/
