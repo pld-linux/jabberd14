@@ -38,6 +38,14 @@ Patch22:	%{name}-xdbcache_lock.patch
 URL:		http://www.jabber.org/
 BuildRequires:	pth-devel
 BuildRequires:	openssl-devel >= 0.9.7
+PreReq:		rc-scripts
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -122,10 +130,10 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ "$1" = 1 ] ; then
 	if [ ! -n "`getgid jabber`" ]; then
-		%{_sbindir}/groupadd -f -g 74 jabber
+		/usr/sbin/groupadd -f -g 74 jabber
 	fi
 	if [ ! -n "`id -u jabber 2>/dev/null`" ]; then
-		%{_sbindir}/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
+		/usr/sbin/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
 	fi
 fi
 
@@ -148,8 +156,8 @@ fi
 %postun
 # If package is being erased for the last time.
 if [ "$1" = "0" ]; then
-	%{_sbindir}/userdel jabber 2> /dev/null
-	%{_sbindir}/groupdel jabber 2> /dev/null
+	/usr/sbin/userdel jabber 2> /dev/null
+	/usr/sbin/groupdel jabber 2> /dev/null
 fi
 
 %files
