@@ -1,3 +1,7 @@
+#
+# Conditional build:
+# _without_ipv6 - without IPv6 support
+#
 Summary:	Jabber messaging system server
 Summary(pl):	Serwer systemu powiadamiania Jabber
 Name:		jabber
@@ -11,6 +15,18 @@ Source2:	%{name}d.init
 Source3:	%{name}d.sysconfig
 Patch0:		%{name}-FHS.patch
 Patch1:		%{name}-ssl_dos_fix.patch
+# Patches from jabberd CVS follow
+Patch10:	%{name}-IPv6.patch
+Patch11:	%{name}-SRV.patch
+Patch12:	%{name}-deadlock.patch
+Patch13:	%{name}-dlopen.patch
+Patch14:	%{name}-dos.patch
+Patch15:	%{name}-double_connect.patch
+Patch16:	%{name}-groups.patch
+Patch17:	%{name}-messages_are_equal.patch
+Patch18:	%{name}-presence.patch
+Patch19:	%{name}-pth.patch
+Patch20:	%{name}-route.patch
 URL:		http://www.jabber.org/
 BuildRequires:	pth-devel
 BuildRequires:	openssl-devel
@@ -44,12 +60,26 @@ Jabber.
 %setup  -q
 %patch0 -p1
 %patch1 -p1
+
+%patch10 -p0
+%patch11 -p0
+%patch12 -p0
+%patch13 -p0
+%patch14 -p0
+%patch15 -p0
+%patch16 -p0
+%patch17 -p0
+%patch18 -p0
+%patch19 -p0
+%patch20 -p0
+
 cp -f %{SOURCE1} .
 
 %build
 JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %configure \
-	--enable-ssl
+	--enable-ssl \
+	--%{?!_without_ipv6:enable}%{?_without_ipv6:disable}-ipv6
 %{__make}
 
 %install
