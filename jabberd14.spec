@@ -1,41 +1,25 @@
 #
 # Conditional build:
-# _with_ipv6 - with IPv6 support
-#
+%bcond_with ipv6	# - with IPv6 support
+
 Summary:	Old "jabber.org" Jabber server daemon
 Summary(pl):	Stary serwer Jabbera "z jabber.org"
 Name:		jabberd14
-Version:	1.4.2
-Release:	2
+Version:	1.4.3
+Release:	1
 License:	distributable
 Group:		Applications/Communications
-Source0:	http://download.jabber.org/dists/1.4/final/jabber-%{version}.tar.gz
-# Source0-md5:	10780dbdb93926ea5bb360e1186b939c
+Source0:	http://jabberd.jabberstudio.org/1.4/dist/jabberd-%{version}.tar.gz
+# Source0-md5:	a3e964d6fa07b5d850302ae0512f94c6
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-FHS.patch
-Patch1:		%{name}-ssl_dos_fix.patch
-Patch2:		%{name}-mod_disco.patch
-Patch3:		%{name}-mod_stats.patch
-Patch4:		%{name}-register-deny_new.patch
-Patch5:		%{name}-browse.patch
-Patch6:		%{name}-detach_from_terminal.patch
-Patch7:		%{name}-opt.patch
-# Patches from jabberd CVS follow
-Patch10:	%{name}-IPv6.patch
-Patch11:	%{name}-SRV.patch
-Patch12:	%{name}-deadlock.patch
-Patch13:	%{name}-dlopen.patch
-Patch14:	%{name}-dos.patch
-Patch15:	%{name}-double_connect.patch
-Patch16:	%{name}-groups.patch
-Patch17:	%{name}-messages_are_equal.patch
-Patch18:	%{name}-presence.patch
-Patch19:	%{name}-pth.patch
-Patch20:	%{name}-route.patch
-Patch21:	%{name}-allow_sslonly.patch
-Patch22:	%{name}-xdbcache_lock.patch
-URL:		http://www.jabber.org/
+Patch1:		%{name}-mod_stats.patch
+Patch2:		%{name}-register-deny_new.patch
+Patch3:		%{name}-browse.patch
+Patch4:		%{name}-detach_from_terminal.patch
+Patch5:		%{name}-opt.patch
+URL:		http://jabberd.jabberstudio.org/1.4/
 BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	pth-devel
 PreReq:		rc-scripts
@@ -87,35 +71,19 @@ Ten pakiet zawiera pliki niezbêdne do tworzenia rozszerzeñ serwera
 jabberd-1.4.x.
 
 %prep
-%setup -qn jabber-%{version}
+%setup -qn jabberd-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p0
-%patch6 -p1
-%patch7 -p1
-
-%patch10 -p0
-%patch11 -p0
-%patch12 -p0
-%patch13 -p0
-%patch14 -p0
-%patch15 -p0
-%patch16 -p0
-%patch17 -p0
-%patch18 -p0
-%patch19 -p0
-%patch20 -p0
-%patch21 -p0
-%patch22 -p0
+%patch5 -p1
 
 %build
 JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %configure \
 	--enable-ssl \
-	--%{?_with_ipv6:enable}%{?!_with_ipv6:disable}-ipv6
+	--%{?with_ipv6:enable}%{?!with_ipv6:disable}-ipv6
 
 %{__make} \
 	CC="%{__cc}" \
@@ -129,7 +97,7 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir}/jabber,%{_sbindir},/etc/{rc.d/init.d,s
 	$RPM_BUILD_ROOT%{_includedir}/%{name}/lib
 
 install jabberd/jabberd $RPM_BUILD_ROOT%{_sbindir}/%{name}
-install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}/jabber/jabberd14.xml
+sed -e 's,@libdir@,%{_libdir},g' jabber.xml > $RPM_BUILD_ROOT%{_sysconfdir}/jabber/jabberd14.xml
 install xdb_file/xdb_file.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install pthsock/pthsock_client.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install jsm/jsm.so $RPM_BUILD_ROOT%{_libdir}/%{name}
