@@ -170,7 +170,7 @@ fi
 %attr(770,root,jabber) /var/log/%{name}
 %dir %{_sysconfdir}/jabberd
 %attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/jabberd/*.xml
-%attr(755,root,root) /etc/rc.d/init.d/jabberd
+%attr(754,root,root) /etc/rc.d/init.d/jabberd
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/jabberd
 
 %files devel
