@@ -62,21 +62,21 @@ JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_sbindir},/etc/rc.d/init.d,/etc/sysconfig}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/jabberd,%{_sbindir},/etc/rc.d/init.d,/etc/sysconfig}
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/spool
-install -d $RPM_BUILD_ROOT{/var/log/%{name},%{_libdir}/%{name}}
+install -d $RPM_BUILD_ROOT{/var/log/%{name},%{_libdir}/jabberd}
 install -d $RPM_BUILD_ROOT%{_includedir}/jabberd/lib
 
 install jabberd/jabberd $RPM_BUILD_ROOT%{_sbindir}
-install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-install xdb_file/xdb_file.so $RPM_BUILD_ROOT%{_libdir}/%{name}
-install pthsock/pthsock_client.so $RPM_BUILD_ROOT%{_libdir}/%{name}
-install jsm/jsm.so $RPM_BUILD_ROOT%{_libdir}/%{name}
-install dialback/dialback.so $RPM_BUILD_ROOT%{_libdir}/%{name}
-install dnsrv/dnsrv.so $RPM_BUILD_ROOT%{_libdir}/%{name}
+install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}/jabberd
+install xdb_file/xdb_file.so $RPM_BUILD_ROOT%{_libdir}/jabberd
+install pthsock/pthsock_client.so $RPM_BUILD_ROOT%{_libdir}/jabberd
+install jsm/jsm.so $RPM_BUILD_ROOT%{_libdir}/jabberd
+install dialback/dialback.so $RPM_BUILD_ROOT%{_libdir}/jabberd
+install dnsrv/dnsrv.so $RPM_BUILD_ROOT%{_libdir}/jabberd
 install jabberd/*.h $RPM_BUILD_ROOT%{_includedir}/jabberd
 install jabberd/lib/*.h $RPM_BUILD_ROOT%{_includedir}/jabberd/lib
-install platform-settings $RPM_BUILD_ROOT%{_libdir}/%{name}/
+install platform-settings $RPM_BUILD_ROOT%{_libdir}/jabberd/
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/jabberd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/jabberd
 
@@ -122,16 +122,16 @@ fi
 %defattr(644,root,root,755)
 %doc *.gz howto*.html pthsock/*.gz
 %attr(755,root,root) %{_sbindir}/*
-%dir %{_libdir}/%{name}
-%{_libdir}/%{name}/*.so
+%dir %{_libdir}/jabberd
+%{_libdir}/jabberd/*.so
 %attr(771,root,jabber) %{_localstatedir}/lib/%{name}
 %attr(770,root,jabber) /var/log/%{name}
-%dir %{_sysconfdir}/%{name}
-%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.xml
+%dir %{_sysconfdir}/jabberd
+%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/jabberd/*.xml
 %attr(755,root,root) /etc/rc.d/init.d/jabberd
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/jabberd
 
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/*
-%{_libdir}/%{name}/platform-settings
+%{_libdir}/jabberd/platform-settings
