@@ -2,7 +2,7 @@ Summary:	Jabber messaging system server
 Summary(pl):	Serwer systemu powiadamiania Jabber
 Name:		jabber
 Version:	1.4.2
-Release:	2
+Release:	3
 License:	distributable
 Group:		Applications/Communications
 Source0:	http://download.jabber.org/dists/1.4/final/%{name}-%{version}.tar.gz
@@ -10,6 +10,7 @@ Source1:	http://docs.jabber.org/no-sgml/howto-1.4.html
 Source2:	%{name}d.init
 Source3:	%{name}d.sysconfig
 Patch0:		%{name}-FHS.patch
+Patch1:		%{name}-ssl_dos_fix.patch
 URL:		http://www.jabber.org/
 BuildRequires:	pth-devel
 BuildRequires:	openssl-devel
@@ -42,6 +43,7 @@ Jabber.
 %prep
 %setup  -q
 %patch0 -p1
+%patch1 -p1
 cp -f %{SOURCE1} .
 
 %build
