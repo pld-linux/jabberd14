@@ -10,7 +10,9 @@ Release:	7
 License:	distributable
 Group:		Applications/Communications
 Source0:	http://download.jabber.org/dists/1.4/final/%{name}-%{version}.tar.gz
+# Source0-md5:	10780dbdb93926ea5bb360e1186b939c
 Source1:	http://docs.jabber.org/no-sgml/howto-1.4.html
+# Source1-md5:	3cee6d5a9b06d7121f74330137f03f37
 Source2:	%{name}d.init
 Source3:	%{name}d.sysconfig
 Patch0:		%{name}-FHS.patch
