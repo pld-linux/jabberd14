@@ -1,0 +1,5 @@
+# Customized setings for jabberd14
+
+# Define nice level for jabberd14 
+SERVICE_RUN_NICE_LEVEL="+5"
+
