@@ -20,6 +20,7 @@ Patch3:		%{name}-mod_stats.patch
 Patch4:		%{name}-register-deny_new.patch
 Patch5:		%{name}-browse.patch
 Patch6:		%{name}-detach_from_terminal.patch
+Patch7:		%{name}-opt.patch
 # Patches from jabberd CVS follow
 Patch10:	%{name}-IPv6.patch
 Patch11:	%{name}-SRV.patch
@@ -35,8 +36,8 @@ Patch20:	%{name}-route.patch
 Patch21:	%{name}-allow_sslonly.patch
 Patch22:	%{name}-xdbcache_lock.patch
 URL:		http://www.jabber.org/
-BuildRequires:	pth-devel
 BuildRequires:	openssl-devel >= 0.9.7c
+BuildRequires:	pth-devel
 PreReq:		rc-scripts
 Requires(pre):	jabber-common
 Requires(post,preun):	/sbin/chkconfig
@@ -94,6 +95,7 @@ jabberd-1.4.x.
 %patch4 -p1
 %patch5 -p0
 %patch6 -p1
+%patch7 -p1
 
 %patch10 -p0
 %patch11 -p0
@@ -114,7 +116,10 @@ JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %configure \
 	--enable-ssl \
 	--%{?_with_ipv6:enable}%{?!_with_ipv6:disable}-ipv6
-%{__make}
+
+%{__make} \
+	CC="%{__cc}" \
+	CCFLAGS="%{rpmcflags} -Wall -I. -I.. -I/usr/include/openssl -DHAVE_SSL -fPIC"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -164,7 +169,7 @@ fi
 %doc README UPGRADE pthsock/README*
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_libdir}/%{name}
-%{_libdir}/%{name}/*.so
+%attr(755,root,root) %{_libdir}/%{name}/*.so
 %attr(771,root,jabber) %{_localstatedir}/lib/%{name}
 %attr(770,root,jabber) /var/log/%{name}
 
