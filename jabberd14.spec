@@ -62,13 +62,13 @@ JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_sbindir},/etc/rc.d/init.d,/etc/sysconfig}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_sbindir},/etc/rc.d/init.d,/etc/sysconfig}
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/spool
 install -d $RPM_BUILD_ROOT{/var/log/%{name},%{_libdir}/%{name}}
 install -d $RPM_BUILD_ROOT%{_includedir}/jabberd/lib
 
 install jabberd/jabberd $RPM_BUILD_ROOT%{_sbindir}
-install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}
+install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install xdb_file/xdb_file.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install pthsock/pthsock_client.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install jsm/jsm.so $RPM_BUILD_ROOT%{_libdir}/%{name}
@@ -126,7 +126,8 @@ fi
 %{_libdir}/%{name}/*.so
 %attr(771,root,jabber) %{_localstatedir}/lib/%{name}
 %attr(770,root,jabber) /var/log/%{name}
-%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/jabber.xml
+%dir %{_sysconfdir}/%{name}
+%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.xml
 %attr(755,root,root) /etc/rc.d/init.d/jabberd
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/jabberd
 
