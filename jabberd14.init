@@ -5,7 +5,7 @@
 # Starts the at daemon
 #
 # chkconfig:	345 40 60
-# description:	"Jabber server" daemon for the Service Location Protocol
+# description:	jabberd-1.4 Jabber server
 # processname:	jabberd14
 
 # Source function library
