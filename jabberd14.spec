@@ -2,7 +2,7 @@ Summary:	Jabber messaging system server
 Summary(pl):	Serwer systemu powiadamiania Jabber
 Name:		jabber
 Version:	1.4.2
-Release:	3
+Release:	4
 License:	distributable
 Group:		Applications/Communications
 Source0:	http://download.jabber.org/dists/1.4/final/%{name}-%{version}.tar.gz
