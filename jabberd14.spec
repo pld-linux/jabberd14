@@ -63,9 +63,9 @@ JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_sbindir},/etc/rc.d/init.d,/etc/sysconfig}
-install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_localstatedir}/lib/%{name}/spool}
+install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/spool
 install -d $RPM_BUILD_ROOT{/var/log/%{name},%{_libdir}/%{name}}
-install -d $RPM_BUILD_ROOT%{_includedir}/%{name}/lib
+install -d $RPM_BUILD_ROOT%{_includedir}/jabberd/lib
 
 install jabberd/jabberd $RPM_BUILD_ROOT%{_sbindir}
 install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}
@@ -74,10 +74,9 @@ install pthsock/pthsock_client.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install jsm/jsm.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install dialback/dialback.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install dnsrv/dnsrv.so $RPM_BUILD_ROOT%{_libdir}/%{name}
-install jabberd/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}
-install jabberd/lib/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/lib
-install jabberd/lib/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/lib
-install platform-settings $RPM_BUILD_ROOT%{_datadir}/%{name}/
+install jabberd/*.h $RPM_BUILD_ROOT%{_includedir}/jabberd
+install jabberd/lib/*.h $RPM_BUILD_ROOT%{_includedir}/jabberd/lib
+install platform-settings $RPM_BUILD_ROOT%{_libdir}/%{name}/
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/jabberd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/jabberd
 
@@ -123,14 +122,15 @@ fi
 %defattr(644,root,root,755)
 %doc *.gz howto*.html pthsock/*.gz
 %attr(755,root,root) %{_sbindir}/*
-%dir %{_datadir}/%{name}
-%{_libdir}/%{name}
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/*.so
 %attr(771,root,jabber) %{_localstatedir}/lib/%{name}
 %attr(770,root,jabber) /var/log/%{name}
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/jabber.xml
+%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/jabber.xml
 %attr(755,root,root) /etc/rc.d/init.d/jabberd
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/jabberd
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/%{name}
+%{_includedir}/*
+%{_libdir}/%{name}/platform-settings
