@@ -1,0 +1,381 @@
+diff -durN jabber-1.4.2.orig/jabber.xml jabber-1.4.2/jabber.xml
+--- jabber-1.4.2.orig/jabber.xml	Tue Apr 29 11:33:58 2003
++++ jabber-1.4.2/jabber.xml	Tue Apr 29 11:36:42 2003
+@@ -284,8 +284,20 @@
+ 	<feature var="http://jabber.org/protocol/disco#info"/>
+ 	<feature var="jabber:xdb:ginsert"/>
+ 	<feature var="jabber:xdb:nslist"/>
++	<feature var="http://jabber.org/protocol/stats"/>
+       </disco>
+ 
++      <stats>
++        <stat name='time/uptime' handler='uptime'/>
++        <stat name='users/online' units='users' handler='online_users'/>
++        <stat name='users/registered' units='users' handler='count_files'>/var/lib/jabber/spool/%H</stat>
++
++	<!--
++        <stat name='memory/system-used' units='kbytes' handler='external'>free | awk '/^Mem:/ {print $3}'</stat>
++        <stat name='test/test' units='units' handler='external'>echo 123</stat>
++	-->
++      </stats>
++
+     </jsm>
+ 
+     <!--
+@@ -318,6 +330,7 @@
+       <mod_register>/usr/lib/jabberd/jsm.so</mod_register>
+       <mod_xml>/usr/lib/jabberd/jsm.so</mod_xml>
+       <mod_disco>/usr/lib/jabberd/jsm.so</mod_disco>
++      <mod_stats>/usr/lib/jabberd/jsm.so</mod_stats>
+     </load>
+ 
+   </service>
+diff -durN jabber-1.4.2.orig/jsm/Makefile jabber-1.4.2/jsm/Makefile
+--- jabber-1.4.2.orig/jsm/Makefile	Tue Apr 29 11:33:58 2003
++++ jabber-1.4.2/jsm/Makefile	Tue Apr 29 11:34:27 2003
+@@ -39,7 +39,8 @@
+ 	modules/mod_log.o \
+ 	modules/mod_last.o \
+ 	modules/mod_offline.o \
+-	modules/mod_disco.o
++	modules/mod_disco.o \
++	modules/mod_stats.o
+ 
+ SUBDIRS=modules
+ 
+diff -durN jabber-1.4.2.orig/jsm/modules/Makefile jabber-1.4.2/jsm/modules/Makefile
+--- jabber-1.4.2.orig/jsm/modules/Makefile	Tue Apr 29 11:33:58 2003
++++ jabber-1.4.2/jsm/modules/Makefile	Tue Apr 29 11:35:05 2003
+@@ -25,7 +25,8 @@
+ 	mod_log.o \
+ 	mod_last.o \
+ 	mod_offline.o \
+-	mod_disco.o
++	mod_disco.o \
++	mod_stats.o
+ 
+ $(jsm_modules_OBJECTS): $(jsm_modules_HEADERS)
+ 
+diff -durN jabber-1.4.2.orig/jsm/modules/mod_stats.c jabber-1.4.2/jsm/modules/mod_stats.c
+--- jabber-1.4.2.orig/jsm/modules/mod_stats.c	Thu Jan  1 01:00:00 1970
++++ jabber-1.4.2/jsm/modules/mod_stats.c	Thu Apr 24 09:00:44 2003
+@@ -0,0 +1,319 @@
++/* 
++ * mod_stats - JEP-0039 (statistics gathering) by Jacek Konieczny
++ */
++/* --------------------------------------------------------------------------
++ *
++ * License
++ *
++ * The contents of this file are subject to the Jabber Open Source License
++ * Version 1.0 (the "JOSL").  You may not copy or use this file, in either
++ * source code or executable form, except in compliance with the JOSL. You
++ * may obtain a copy of the JOSL at http://www.jabber.org/ or at
++ * http://www.opensource.org/.  
++ *
++ * Software distributed under the JOSL is distributed on an "AS IS" basis,
++ * WITHOUT WARRANTY OF ANY KIND, either express or implied.  See the JOSL
++ * for the specific language governing rights and limitations under the
++ * JOSL.
++ *
++ * Copyrights
++ * 
++ * Portions created by or assigned to Jabber.com, Inc. are 
++ * Copyright (c) 1999-2002 Jabber.com, Inc.  All Rights Reserved.  Contact
++ * information for Jabber.com, Inc. is available at http://www.jabber.com/.
++ *
++ * Portions Copyright (c) 1998-1999 Jeremie Miller.
++ * 
++ * Acknowledgements
++ * 
++ * Special thanks to the Jabber Open Source Contributors for their
++ * suggestions and support of Jabber.
++ * 
++ * Alternatively, the contents of this file may be used under the terms of the
++ * GNU General Public License Version 2 or later (the "GPL"), in which case
++ * the provisions of the GPL are applicable instead of those above.  If you
++ * wish to allow use of your version of this file only under the terms of the
++ * GPL and not to allow others to use your version of this file under the JOSL,
++ * indicate your decision by deleting the provisions above and replace them
++ * with the notice and other provisions required by the GPL.  If you do not
++ * delete the provisions above, a recipient may use your version of this file
++ * under either the JOSL or the GPL. 
++ * 
++ * 
++ * --------------------------------------------------------------------------*/
++#include "jsm.h"
++#include <dirent.h>
++#include <sys/stat.h>
++#include <sys/wait.h>
++
++struct stats_persistent_data {
++	time_t start;
++};
++
++struct stat_data {
++	struct stats_persistent_data *pers;
++	const char *name;
++	xmlnode stat;
++	xmlnode config;
++	mapi m;
++};
++
++struct stat_handler {
++	const char *name;
++	void (*f)(struct stat_data *data);
++};
++
++static char *stats_handle_pattern(struct stat_data *data,const char *pattern) {
++spool sp;
++const char *p;
++char b[2]=".";
++
++	sp=spool_new(data->stat->p);
++	for(p=pattern;*p;p++){
++		if (*p!='%') {
++			b[0]=*p;
++			spool_add(sp,b);
++			continue;
++		}
++		p++;
++		if (!*p) break;
++		switch(*p){
++			case 'H':
++				spool_add(sp,data->m->packet->to->server);
++				break;
++			default:
++				spool_add(sp,"?");
++				break;
++		}
++	}
++	return spool_print(sp);
++}
++
++static void stats_set_error(struct stat_data *data,int code,const char *message){
++char str[4];
++xmlnode error;
++
++	error=xmlnode_insert_tag(data->stat,"error");
++	sprintf(str,"%03i",code);
++	xmlnode_put_attrib(error,"code",str);
++	xmlnode_insert_cdata(error,message,-1);
++}
++
++static void stats_set_result(struct stat_data *data,const char *value,const char *default_units){
++const char *units;
++
++	units=xmlnode_get_attrib(data->config,"units");
++	if (units==NULL) units=default_units;
++
++	xmlnode_put_attrib(data->stat,"value",value);
++	if (units) xmlnode_put_attrib(data->stat,"units",units);
++}
++
++static void stats_set_int_result(struct stat_data *data,int value,const char *default_units){
++char str[32];
++
++	sprintf(str,"%i",value);
++	stats_set_result(data,str,default_units);
++}
++
++static void stats_uptime(struct stat_data *data) {
++
++	stats_set_int_result(data,time(NULL)-data->pers->start,"seconds");
++};
++
++static int _stats_online_users(void *arg, const void *key, void *data) {
++udata u = (udata)data;	
++session s = js_session_primary(u);
++int *counter = (int *)arg;
++
++	if (s!=NULL) (*counter)++;
++	return 1;
++}
++
++static void stats_online_users(struct stat_data *data) {
++int counter=0;
++
++        /* walk the users on this host */
++        ghash_walk(ghash_get(data->m->si->hosts, data->m->packet->to->server),_stats_online_users,(void *)&counter);
++	stats_set_int_result(data,counter,"users");
++};
++
++static void stats_count_files(struct stat_data *data) {
++DIR *dir;
++struct dirent *de;
++struct stat st;
++const char *olddir;
++char *arg,*path;
++char buf[1024];
++int r,count=0;
++
++	arg=xmlnode_get_data(data->config);
++	if (arg==NULL) {
++		log_debug(ZONE,"no directory path configured for stat '%s'",data->name);
++		stats_set_error(data,500,"Internal error");
++		return;
++	}
++	path=stats_handle_pattern(data,arg);
++	log_debug(ZONE,"counting files in '%s'",path);
++	olddir=getcwd(buf,1024);
++	if (!olddir){
++		log_debug(ZONE,"couldn't get current working directory");
++		stats_set_error(data,404,"Not Found");
++		return;
++	}
++
++	r=chdir(path);
++	if (r){
++		log_debug(ZONE,"couldn't chdir to '%s'",path);
++		stats_set_error(data,404,"Not Found");
++		return;
++	}
++
++	dir=opendir(".");
++	if (!dir){
++		log_debug(ZONE,"couldn't open '%s' directory",path);
++		stats_set_error(data,404,"Not Found");
++		chdir(olddir);
++		return;
++	}
++		
++        while((de=readdir(dir))){
++                r=stat(de->d_name,&st);
++                if (r){
++			log_debug(ZONE,"couldn't stat '%s'",de->d_name);
++                        continue;
++                }
++                if (S_ISREG(st.st_mode)) count++;
++        }
++        closedir(dir);
++	chdir(olddir);
++	stats_set_int_result(data,count,"files");
++};
++
++static void stats_external(struct stat_data *data) {
++char *arg,*command;
++char buf[129];
++FILE *p;
++int r;
++spool sp;
++
++	arg=xmlnode_get_data(data->config);
++	if (arg==NULL) {
++		log_debug(ZONE,"no command configured for stat '%s'",data->name);
++		stats_set_error(data,500,"Internal error");
++		return;
++	}
++	command=stats_handle_pattern(data,arg);
++	log_debug(ZONE,"executing command '%s'",command);
++
++	p=popen(command,"r");
++	if (!p) {
++		log_debug(ZONE,"couldn't start command '%s'",command);
++		stats_set_error(data,503,"Service unavailable");
++		return;
++	}
++
++	sp=spool_new(data->stat->p);
++	while((r=fread(buf,1,128,p))>0){
++		log_debug(ZONE,"command output: %s",buf);
++		buf[r]=0;
++		spool_add(sp,buf);
++	}
++	
++	r=pclose(p);
++	if (WIFEXITED(r)){
++		if (WEXITSTATUS(r)==0) {
++			log_debug(ZONE,"command exited normally");
++			stats_set_result(data,spool_print(sp),"units");
++			return;
++		}
++		log_debug(ZONE,"command exited with status %i",WEXITSTATUS(r));
++	}
++	else log_debug(ZONE,"command failed");
++
++	stats_set_error(data,503,"Service unavailable");
++};
++
++static struct stat_handler stat_handlers[]={
++	{ "uptime", stats_uptime },
++	{ "online_users", stats_online_users },
++	{ "count_files", stats_count_files },
++	{ "external", stats_external },
++	{ NULL, NULL }
++};
++
++mreturn mod_stats_server(mapi m, void *arg) {
++struct stat_data data;
++struct stat_handler *handler;
++xmlnode stat;
++xmlnode stat_cfg;
++xmlnode stats_cfg;
++xmlnode result;
++const char *hname;
++	
++	if (m->packet->type != JPACKET_IQ) return M_IGNORE;
++	if (jpacket_subtype(m->packet) != JPACKET__GET 
++		    || !NSCHECK(m->packet->iq,"http://jabber.org/protocol/stats") 
++		    || m->packet->to->resource != NULL) return M_PASS;
++
++	/* get data from the config file */
++	if((stats_cfg = js_config(m->si,"stats")) == NULL)
++		return M_PASS;
++   
++	log_debug(ZONE,"handling stats request from %s",jid_full(m->packet->from));
++	jutil_iqresult(m->packet->x);
++	result=xmlnode_insert_tag(m->packet->x,"query");
++	xmlnode_put_attrib(result,"xmlns","http://jabber.org/protocol/stats");
++	
++	stat=xmlnode_get_firstchild(m->packet->iq);
++	if (stat==NULL) {
++		for(stat_cfg=xmlnode_get_firstchild(stats_cfg);stat_cfg;stat_cfg=xmlnode_get_nextsibling(stat_cfg)){
++			if (j_strcmp(xmlnode_get_name(stat_cfg),"stat") != 0) continue;
++			stat=xmlnode_insert_tag(result,"stat");
++			xmlnode_put_attrib(stat,"name",xmlnode_get_attrib(stat_cfg,"name"));
++		}
++		jpacket_reset(m->packet);
++    		js_deliver(m->si,m->packet);
++		return M_HANDLED;
++	}
++
++	data.m=m;
++	data.pers=(struct stats_persistent_data *)arg;
++	for(;stat;stat=xmlnode_get_nextsibling(stat)){
++		log_debug(ZONE,"query child: <%s/>",xmlnode_get_name(stat));
++		if (j_strcmp(xmlnode_get_name(stat),"stat") != 0) continue;
++		data.name=xmlnode_get_attrib(stat,"name");
++		data.stat=xmlnode_insert_tag(result,"stat");
++		xmlnode_put_attrib(data.stat,"name",data.name);
++		log_debug(ZONE,"searching for configuration of stat '%s'",data.name);
++		for(stat_cfg=xmlnode_get_firstchild(stats_cfg);stat_cfg;stat_cfg=xmlnode_get_nextsibling(stat_cfg)){
++			if (j_strcmp(xmlnode_get_name(stat_cfg),"stat") != 0) continue;
++			if (j_strcmp(xmlnode_get_attrib(stat_cfg,"name"),data.name) != 0) continue;
++			data.config=stat_cfg;
++			hname=xmlnode_get_attrib(stat_cfg,"handler");
++			log_debug(ZONE,"searching for '%s' handler",hname);
++			for(handler=stat_handlers;handler->name;handler++){
++				if (j_strcmp(hname,handler->name)!=0)
++					continue;
++				log_debug(ZONE,"executing for '%s' handler",hname);
++				handler->f(&data);
++				break;
++			}
++			if (handler==NULL) stats_set_error(&data,501,"Not Implemented");
++			break;
++		}
++		if (stat_cfg==NULL) stats_set_error(&data,404,"Not Found");
++	}
++	jpacket_reset(m->packet);
++	js_deliver(m->si,m->packet);
++	return M_HANDLED;
++}
++
++/* the main startup/initialization function */
++void mod_stats(jsmi si) {
++struct stats_persistent_data *data;
++
++	data = pmalloc(si->p, sizeof(struct stats_persistent_data));
++	data->start=time(NULL);
++	js_mapi_register(si,e_SERVER,mod_stats_server,(void *)data);
++}
