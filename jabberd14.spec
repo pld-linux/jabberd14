@@ -1,6 +1,6 @@
 #
 # Conditional build:
-# _without_ipv6 - without IPv6 support
+# _with_ipv6 - with IPv6 support
 #
 Summary:	Jabber messaging system server
 Summary(pl):	Serwer systemu powiadamiania Jabber
@@ -79,7 +79,7 @@ cp -f %{SOURCE1} .
 JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %configure \
 	--enable-ssl \
-	--%{?!_without_ipv6:enable}%{?_without_ipv6:disable}-ipv6
+	--%{?_with_ipv6:enable}%{?!_with_ipv6:disable}-ipv6
 %{__make}
 
 %install
