@@ -70,8 +70,6 @@ install platform-settings $RPM_BUILD_ROOT%{_libdir}/jabberd/
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/jabberd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/jabberd
 
-gzip -9nf README UPGRADE pthsock/README*
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -110,7 +108,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz howto*.html pthsock/*.gz
+%doc README UPGRADE howto*.html pthsock/README*
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_libdir}/jabberd
 %{_libdir}/jabberd/*.so
