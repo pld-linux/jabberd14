@@ -11,8 +11,8 @@ License:	distributable
 Group:		Applications/Communications
 Source0:	http://download.jabber.org/dists/1.4/final/jabber-%{version}.tar.gz
 # Source0-md5:	10780dbdb93926ea5bb360e1186b939c
-Source2:	%{name}.init
-Source3:	%{name}.sysconfig
+Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-FHS.patch
 Patch1:		%{name}-ssl_dos_fix.patch
 Patch2:		%{name}-mod_disco.patch
@@ -68,6 +68,7 @@ Summary:	jabberd-1.4 based Jabber server
 Summary(pl):	Serwer Jabbera oparty o jabberd-1.4
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
+Obsoletes:	jabber
 
 %description server
 Jabber server based on jabberd v. 1.4.x.
@@ -134,8 +135,8 @@ install dnsrv/dnsrv.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 install jabberd/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}
 install jabberd/lib/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/lib
 install platform-settings $RPM_BUILD_ROOT%{_libdir}/%{name}/
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -167,11 +168,6 @@ if [ "$1" = "0" ]; then
 fi
 
 %postun
-# If package is being erased for the last time.
-if [ "$1" = "0" ]; then
-	/usr/sbin/userdel jabber 2> /dev/null
-	/usr/sbin/groupdel jabber 2> /dev/null
-fi
 
 %files
 %defattr(644,root,root,755)
