@@ -1,0 +1,96 @@
+Index: jabber.xml
+===================================================================
+RCS file: /home/cvs/jabberd14/jabber.xml,v
+retrieving revision 1.65
+diff -u -r1.65 jabber.xml
+--- jabber.xml	15 May 2001 15:21:56 -0000	1.65
++++ jabber.xml	7 May 2003 09:23:04 -0000
+@@ -219,14 +219,14 @@
+         <!-- 
+         This is the default agent for the master Jabber User 
+         Directory, a.k.a. "JUD", which is located at jabber.org.
+-        You can add separate <service/> sections for additional
++        You can add separate <item/> sections for additional
+         directories, e.g., one for a company intranet.
+         -->
+ 
+-        <service type="jud" jid="users.jabber.org" name="Jabber User Directory">
++	<item category="service" type="jud" jid="users.jabber.org" name="Jabber User Directory">
+           <ns>jabber:iq:search</ns>
+           <ns>jabber:iq:register</ns>
+-        </service>
++        </item>
+ 
+         <!--
+         The following services are examples only, you will need to
+@@ -237,19 +237,19 @@
+ 
+         <!-- we're commenting these out, of course :)
+ 
+-        <conference type="private" jid="conference.localhost" name="Private Conferencing"/>
++        <item category="conference" type="private" jid="conference.localhost" name="Private Conferencing"/>
+ 
+-        <service type="aim" jid="aim.localhost" name="AIM Transport">
++        <item category="service" type="aim" jid="aim.localhost" name="AIM Transport">
+           <ns>jabber:iq:gateway</ns>
+           <ns>jabber:iq:register</ns>
+-        </service>
++        </item>
+ 
+-        <service type="yahoo" jid="yahoo.localhost" name="Yahoo! Transport">
++        <item category="service" type="yahoo" jid="yahoo.localhost" name="Yahoo! Transport">
+           <ns>jabber:iq:gateway</ns>
+           <ns>jabber:iq:register</ns>
+-        </service>
++        </item>
+ 
+-        end of <service/> examples -->
++        end of service examples -->
+ 
+       </browse>
+ 
+Index: jsm/modules/mod_browse.c
+===================================================================
+RCS file: /home/cvs/jabberd14/jsm/modules/mod_browse.c,v
+retrieving revision 1.10
+diff -u -r1.10 mod_browse.c
+--- jsm/modules/mod_browse.c	8 Feb 2002 07:44:17 -0000	1.10
++++ jsm/modules/mod_browse.c	7 May 2003 09:23:05 -0000
+@@ -52,7 +52,8 @@
+     { /* no browse is set up yet, we must create one for this user! */
+         if(id->resource == NULL)
+         { /* a user is only the user@host */
+-            browse = xmlnode_new_tag("user");
++            browse = xmlnode_new_tag("item");
++            xmlnode_put_attrib(browse,"category","user");
+             /* get the friendly name for this user from somewhere */
+             if((x = xdb_get(m->si->xc, m->user->id, NS_VCARD)) != NULL)
+                 xmlnode_put_attrib(browse,"name",xmlnode_get_tag_data(x,"FN"));
+@@ -178,7 +179,8 @@
+         {
+             /* if(s->priority < 0) continue; *** include all resources I guess */
+             if(xmlnode_get_tag(browse,spools(m->packet->p,"?jid=",jid_full(s->id),m->packet->p)) != NULL) continue; /* already in the browse result */
+-            cur = xmlnode_insert_tag(browse,"user");
++            cur = xmlnode_insert_tag(browse,"item");
++            xmlnode_put_attrib(cur,"category", "user");
+             xmlnode_put_attrib(cur,"type", "client");
+             xmlnode_put_attrib(cur,"jid", jid_full(s->id));
+         }
+@@ -208,8 +210,9 @@
+     log_debug("mod_browse","handling browse query");
+ 
+     /* build the result IQ */
+-    query = xmlnode_insert_tag(jutil_iqresult(m->packet->x),"service");
++    query = xmlnode_insert_tag(jutil_iqresult(m->packet->x),"item");
+     xmlnode_put_attrib(query,"xmlns",NS_BROWSE);
++    xmlnode_put_attrib(query,"category","service");
+     xmlnode_put_attrib(query,"type","jabber");
+     xmlnode_put_attrib(query,"jid",m->packet->to->server);
+     xmlnode_put_attrib(query,"name",xmlnode_get_data(js_config(m->si,"vCard/FN"))); /* pull name from the server vCard */
+@@ -247,4 +250,4 @@
+  * mass goes to read the directions on how to get soap out of it
+ <mass> the thing is really complicated. I'm reminded of the lament cube from Hellraiser
+ <mass> although I'm hoping I get soap instead of pinhead
+-*/
+\ No newline at end of file
++*/
