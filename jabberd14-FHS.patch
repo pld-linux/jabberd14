@@ -1,0 +1,142 @@
+diff -dur jabber-1.4.1.orig/configure jabber-1.4.1/configure
+--- jabber-1.4.1.orig/configure	Sat Feb  3 06:06:24 2001
++++ jabber-1.4.1/configure	Wed Dec 19 17:47:21 2001
+@@ -32,7 +32,7 @@
+ LDFLAGS="$LDFLAGS"
+ LIBS="$LIBS"
+ XLDFLAGS="$XLDFLAGS "
+-JHOME=`pwd`
++[ -n "$JHOME" ] || JHOME=`pwd`
+ 
+ ##
+ # Print a cool header
+Only in jabber-1.4.1: howto-1.4.html
+diff -dur jabber-1.4.1.orig/jabber.xml jabber-1.4.1/jabber.xml
+--- jabber-1.4.1.orig/jabber.xml	Mon Feb  5 23:19:20 2001
++++ jabber-1.4.1/jabber.xml	Wed Dec 19 17:48:10 2001
+@@ -264,26 +264,26 @@
+     -->
+ 
+     <load main="jsm">
+-      <jsm>./jsm/jsm.so</jsm>
+-      <mod_echo>./jsm/jsm.so</mod_echo>
+-      <mod_roster>./jsm/jsm.so</mod_roster>
+-      <mod_time>./jsm/jsm.so</mod_time>
+-      <mod_vcard>./jsm/jsm.so</mod_vcard>
+-      <mod_last>./jsm/jsm.so</mod_last>
+-      <mod_version>./jsm/jsm.so</mod_version>
+-      <mod_announce>./jsm/jsm.so</mod_announce>
+-      <mod_agents>./jsm/jsm.so</mod_agents>
+-      <mod_browse>./jsm/jsm.so</mod_browse>
+-      <mod_admin>./jsm/jsm.so</mod_admin>
+-      <mod_filter>./jsm/jsm.so</mod_filter>
+-      <mod_offline>./jsm/jsm.so</mod_offline>
+-      <mod_presence>./jsm/jsm.so</mod_presence>
+-      <mod_auth_plain>./jsm/jsm.so</mod_auth_plain>
+-      <mod_auth_digest>./jsm/jsm.so</mod_auth_digest>
+-      <mod_auth_0k>./jsm/jsm.so</mod_auth_0k>
+-      <mod_log>./jsm/jsm.so</mod_log>
+-      <mod_register>./jsm/jsm.so</mod_register>
+-      <mod_xml>./jsm/jsm.so</mod_xml>
++      <jsm>/usr/lib/jabber/jsm.so</jsm>
++      <mod_echo>/usr/lib/jabber/jsm.so</mod_echo>
++      <mod_roster>/usr/lib/jabber/jsm.so</mod_roster>
++      <mod_time>/usr/lib/jabber/jsm.so</mod_time>
++      <mod_vcard>/usr/lib/jabber/jsm.so</mod_vcard>
++      <mod_last>/usr/lib/jabber/jsm.so</mod_last>
++      <mod_version>/usr/lib/jabber/jsm.so</mod_version>
++      <mod_announce>/usr/lib/jabber/jsm.so</mod_announce>
++      <mod_agents>/usr/lib/jabber/jsm.so</mod_agents>
++      <mod_browse>/usr/lib/jabber/jsm.so</mod_browse>
++      <mod_admin>/usr/lib/jabber/jsm.so</mod_admin>
++      <mod_filter>/usr/lib/jabber/jsm.so</mod_filter>
++      <mod_offline>/usr/lib/jabber/jsm.so</mod_offline>
++      <mod_presence>/usr/lib/jabber/jsm.so</mod_presence>
++      <mod_auth_plain>/usr/lib/jabber/jsm.so</mod_auth_plain>
++      <mod_auth_digest>/usr/lib/jabber/jsm.so</mod_auth_digest>
++      <mod_auth_0k>/usr/lib/jabber/jsm.so</mod_auth_0k>
++      <mod_log>/usr/lib/jabber/jsm.so</mod_log>
++      <mod_register>/usr/lib/jabber/jsm.so</mod_register>
++      <mod_xml>/usr/lib/jabber/jsm.so</mod_xml>
+     </load>
+ 
+   </service>
+@@ -295,10 +295,10 @@
+   <xdb id="xdb">
+     <host/>
+     <load>
+-      <xdb_file>./xdb_file/xdb_file.so</xdb_file>
++      <xdb_file>/usr/lib/jabber/xdb_file.so</xdb_file>
+     </load>
+     <xdb_file xmlns="jabber:config:xdb_file">
+-      <spool><jabberd:cmdline flag='s'>./spool</jabberd:cmdline></spool>
++      <spool><jabberd:cmdline flag='s'>/var/lib/jabber/spool</jabberd:cmdline></spool>
+     </xdb_file>
+   </xdb>
+ 
+@@ -319,7 +319,7 @@
+ 
+   <service id="c2s">
+     <load>
+-      <pthsock_client>./pthsock/pthsock_client.so</pthsock_client>
++      <pthsock_client>/usr/lib/jabber/pthsock_client.so</pthsock_client>
+     </load>
+     <pthcsock xmlns='jabber:config:pth-csock'>
+       <authtime/>
+@@ -359,7 +359,7 @@
+     <host/>
+     <logtype/>
+     <format>%d: [%t] (%h): %s</format>
+-    <file>error.log</file>
++    <file>/var/log/jabber/error.log</file>
+     <stderr/>
+   </log>
+ 
+@@ -372,7 +372,7 @@
+     <host/>
+     <logtype>record</logtype>
+     <format>%d %h %s</format>
+-    <file>record.log</file>
++    <file>/var/log/jabber/record.log</file>
+   </log>
+ 
+   <!-- The following two services are for handling server-to-server traffic. -->
+@@ -382,7 +382,7 @@
+   <service id="dnsrv">
+     <host/>
+     <load>
+-      <dnsrv>./dnsrv/dnsrv.so</dnsrv>
++      <dnsrv>/usr/lib/jabber/dnsrv.so</dnsrv>
+     </load>
+     <dnsrv xmlns="jabber:config:dnsrv">
+     	<resend service="_jabber._tcp">s2s</resend> <!-- for supporting SRV records -->
+@@ -401,7 +401,7 @@
+ 
+   <service id="s2s">
+     <load>
+-      <dialback>./dialback/dialback.so</dialback>
++      <dialback>/usr/lib/jabber/dialback.so</dialback>
+     </load>
+     <dialback xmlns='jabber:config:dialback'>
+       <legacy/>
+@@ -596,7 +596,7 @@
+   <!--
+   This specifies the file to store the pid of the process in.
+   -->
+-  <pidfile>./jabber.pid</pidfile>
++  <pidfile>/var/lib/jabber/jabber.pid</pidfile>
+ 
+ 
+ </jabber>
+diff -dur jabber-1.4.1.orig/jabberd/config.c jabber-1.4.1/jabberd/config.c
+--- jabber-1.4.1.orig/jabberd/config.c	Thu Feb  1 21:46:49 2001
++++ jabber-1.4.1/jabberd/config.c	Wed Dec 19 17:45:42 2001
+@@ -160,7 +160,7 @@
+ 
+ int configurate(char *file)
+ {
+-    char def[] = "jabber.xml";
++    char def[] = "/etc/jabber.xml";
+     char *realfile = (char *)def;
+ 
+     /* if no file name is specified, fall back to the default file */
