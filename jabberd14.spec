@@ -20,7 +20,7 @@ Patch3:		%{name}-browse.patch
 Patch4:		%{name}-detach_from_terminal.patch
 Patch5:		%{name}-opt.patch
 URL:		http://jabberd.jabberstudio.org/1.4/
-BuildRequires:	openssl-devel >= 0.9.7c
+BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pth-devel
 PreReq:		rc-scripts
 Requires(pre):	jabber-common
