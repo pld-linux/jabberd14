@@ -5,8 +5,14 @@ Version:	1.4.2
 Release:	1
 License:	distributable
 Group:		Applications/Communications
-Group(de):	Applikationen/Kommunikation
+Group(cs):	Aplikace/Komunikace
+Group(de):	Anwendungen/Kommunikation
+Group(es):	Aplicaciones/Comunicaciones
+Group(fr):	Applications/Transmissions
+Group(ja):	¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/ÄÌ¿®
 Group(pl):	Aplikacje/Komunikacja
+Group(pt):	Aplicações/Comunicações
+Group(ru):	ğÒÉÌÏÖÅÎÉÑ/ó×ÑÚØ
 Source0:	http://download.jabber.org/dists/1.4/final/%{name}-%{version}.tar.gz
 Source1:	http://docs.jabber.org/no-sgml/howto-1.4.html
 Source2:	%{name}d.init
@@ -31,11 +37,14 @@ serwerów, do przekazywania danych pomiêdzy nimi i klientami Jabber.
 Summary:	Header and library files for Jabber development
 Summary(pl):	Pliki nag³ówkowe i biblioteki dla tworzenia us³ug Jabber
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
+Group(cs):	Vıvojové prostøedky/Knihovny
+Group(de):	Entwicklung/Bibliotheken
 Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
+Group(ja):	³«È¯/¥é¥¤¥Ö¥é¥ê
 Group(pl):	Programowanie/Biblioteki
 Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(pt):	Desenvolvimento/Bibliotecas
 Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
 Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name} = %{version}
@@ -61,11 +70,10 @@ JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/jabberd,%{_sbindir},/etc/rc.d/init.d,/etc/sysconfig}
-install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/spool
-install -d $RPM_BUILD_ROOT{/var/log/%{name},%{_libdir}/jabberd}
-install -d $RPM_BUILD_ROOT%{_includedir}/jabberd/lib
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/jabberd,%{_sbindir},/etc/{rc.d/init.d,sysconfig}} \
+	$RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/spool \
+	$RPM_BUILD_ROOT{/var/log/%{name},%{_libdir}/jabberd} \
+	$RPM_BUILD_ROOT%{_includedir}/jabberd/lib
 
 install jabberd/jabberd $RPM_BUILD_ROOT%{_sbindir}
 install jabber.xml $RPM_BUILD_ROOT%{_sysconfdir}/jabberd
