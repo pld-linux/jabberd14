@@ -1,4 +1,7 @@
 #
+# TODO:
+# - SECURITY: http://securitytracker.com/alerts/2004/Sep/1011383.html
+#
 # Conditional build:
 %bcond_with ipv6	# - with IPv6 support
 
