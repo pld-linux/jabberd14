@@ -29,7 +29,7 @@ Patch19:	%{name}-pth.patch
 Patch20:	%{name}-route.patch
 URL:		http://www.jabber.org/
 BuildRequires:	pth-devel
-BuildRequires:	openssl-devel
+BuildRequires:	openssl-devel >= 0.9.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
