@@ -1,0 +1,25 @@
+date: 2003/02/26 21:08:58;  author: temas;  state: Exp;  lines: +5 -0
+Actually disable port 5222 if no <ip/>
+
+diff -u -r1.81 -r1.82
+--- pthsock/client.c	8 Feb 2002 07:44:18 -0000	1.81
++++ pthsock/client.c	26 Feb 2003 21:08:58 -0000	1.82
+@@ -583,6 +583,10 @@
+             if(set_karma == 1) mio_karma2(m, k);
+         }
+     }
++/* XXX Added by temas on Feb 26, 2003:  This makes it actually able to remove
++ * port 5222
++ */
++#if 0
+     else /* no special config, use defaults */
+     {
+         mio m;
+@@ -594,6 +598,7 @@
+         /* set new karma valuse */
+         if(set_karma == 1) mio_karma2(m, k);
+     }
++#endif
+ 
+ #ifdef HAVE_SSL
+     /* listen on SSL sockets */
