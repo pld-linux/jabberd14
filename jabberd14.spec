@@ -73,7 +73,7 @@ Ten pakiet zawiera pliki niezbêdne do tworzenia rozszerzeñ serwera
 Jabber.
 
 %prep
-%setup  -q
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -140,9 +140,9 @@ fi
 %post
 /sbin/chkconfig --add jabberd
 if [ -r /var/lock/subsys/jabberd ]; then
-        /etc/rc.d/init.d/jabberd restart >&2
+	/etc/rc.d/init.d/jabberd restart >&2
 else
-        echo "Run \"/etc/rc.d/init.d/jabberd start\" to start Jabber server."
+	echo "Run \"/etc/rc.d/init.d/jabberd start\" to start Jabber server."
 fi
 
 %preun
