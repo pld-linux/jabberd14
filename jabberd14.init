@@ -64,7 +64,7 @@ case "$1" in
 	fi
 	;;
   status)
-	status $0
+	status jabberd14
 	exit $?
 	;;
   *)
