@@ -8,11 +8,11 @@
 Summary:	Old "jabber.org" Jabber server daemon
 Summary(pl):	Stary serwer Jabbera "z jabber.org"
 Name:		jabberd14
-Version:	1.4.3
+Version:	1.4.3.1
 Release:	1
 License:	distributable
 Group:		Applications/Communications
-Source0:	http://jabberd.jabberstudio.org/1.4/dist/jabberd-%{version}.tar.gz
+Source0:	http://jabberd.jabberstudio.org/1.4/dist/jabberd-1.4.3.tar.gz
 # Source0-md5:	a3e964d6fa07b5d850302ae0512f94c6
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -22,6 +22,8 @@ Patch2:		%{name}-register-deny_new.patch
 Patch3:		%{name}-browse.patch
 Patch4:		%{name}-detach_from_terminal.patch
 Patch5:		%{name}-opt.patch
+# Patch6:	http://devel.amessage.info/jabberd14/jabberd-1.4.3.1.diff.bz2
+Patch6:		jabberd14-1.4.3.1.patch
 URL:		http://jabberd.jabberstudio.org/1.4/
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pth-devel
@@ -74,13 +76,14 @@ Ten pakiet zawiera pliki niezbêdne do tworzenia rozszerzeñ serwera
 jabberd-1.4.x.
 
 %prep
-%setup -qn jabberd-%{version}
+%setup -qn jabberd-1.4.3
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
