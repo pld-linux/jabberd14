@@ -36,7 +36,7 @@ Patch21:	%{name}-allow_sslonly.patch
 Patch22:	%{name}-xdbcache_lock.patch
 URL:		http://www.jabber.org/
 BuildRequires:	pth-devel
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	openssl-devel >= 0.9.7c
 PreReq:		rc-scripts
 Requires(pre):	jabber-common
 Requires(post,preun):	/sbin/chkconfig
