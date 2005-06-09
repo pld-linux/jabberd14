@@ -25,8 +25,8 @@ URL:		http://jabberd.jabberstudio.org/1.4/
 BuildRequires:	expat-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pth-devel
+PreReq:		jabber-common
 PreReq:		rc-scripts
-Requires(pre):	jabber-common
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
@@ -53,11 +53,14 @@ serwisów Jabbera.
 Summary:	jabberd-1.4 based Jabber server
 Summary(pl):	Serwer Jabbera oparty o jabberd-1.4
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Obsoletes:	jabber
 
 %description server
 Jabber server based on jabberd v. 1.4.x.
+
+%description server -l pl
+Serwer Jabbera oparty o jabberd-1.4.
 
 %package devel
 Summary:	Header and library files for jabberd14 component development
@@ -66,7 +69,7 @@ Group:		Development/Libraries
 Requires:	expat-devel
 Requires:	openssl-devel >= 0.9.7d
 Requires:	pth-devel
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 This package provides the files necessary to develop jabberd-1.4.x
