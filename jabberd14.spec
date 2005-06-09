@@ -6,7 +6,7 @@ Summary:	Old "jabber.org" Jabber server daemon
 Summary(pl):	Stary serwer Jabbera "z jabber.org"
 Name:		jabberd14
 Version:	1.4.3.1
-Release:	1
+Release:	2
 License:	distributable
 Group:		Applications/Communications
 Source0:	http://jabberd.jabberstudio.org/1.4/dist/jabberd-1.4.3.tar.gz
@@ -22,6 +22,7 @@ Patch5:		%{name}-opt.patch
 # Patch6:	http://devel.amessage.info/jabberd14/jabberd-1.4.3.1.diff.bz2
 Patch6:		jabberd14-1.4.3.1.patch
 URL:		http://jabberd.jabberstudio.org/1.4/
+BuildRequires:	expat-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pth-devel
 PreReq:		rc-scripts
@@ -62,6 +63,8 @@ Jabber server based on jabberd v. 1.4.x.
 Summary:	Header and library files for jabberd14 component development
 Summary(pl):	Pliki nag³ówkowe i biblioteki dla komponentów jabberd14
 Group:		Development/Libraries
+Requires:	expat-devel
+Requires:	openssl-devel >= 0.9.7d
 Requires:	%{name} = %{version}
 
 %description devel
