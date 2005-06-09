@@ -65,6 +65,7 @@ Summary(pl):	Pliki nag³ówkowe i biblioteki dla komponentów jabberd14
 Group:		Development/Libraries
 Requires:	expat-devel
 Requires:	openssl-devel >= 0.9.7d
+Requires:	pth-devel
 Requires:	%{name} = %{version}
 
 %description devel
@@ -149,9 +150,9 @@ fi
 
 %files server
 %defattr(644,root,root,755)
-%attr(640,root,jabber) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/jabber/*.xml
+%attr(640,root,jabber) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/jabber/*.xml
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 
 %files devel
 %defattr(644,root,root,755)
