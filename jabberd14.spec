@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with ipv6	# - with IPv6 support
+%bcond_with	ipv6	# - with IPv6 support
 
 Summary:	Old "jabber.org" Jabber server daemon
 Summary(pl):	Stary serwer Jabbera "z jabber.org"
