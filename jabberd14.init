@@ -46,7 +46,7 @@ case "$1" in
 		rm -f /var/lock/subsys/jabberd14 >/dev/null 2>&1
 	else
 		msg_not_running "Jabber server"
-	fi	
+	fi
 	;;
   restart)
 	$0 stop
