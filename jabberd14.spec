@@ -20,16 +20,17 @@ Patch3:		%{name}-browse.patch
 Patch4:		%{name}-detach_from_terminal.patch
 Patch5:		%{name}-opt.patch
 # Patch6:	http://devel.amessage.info/jabberd14/jabberd-1.4.3.1.diff.bz2
-Patch6:		jabberd14-1.4.3.1.patch
+Patch6:		%{name}-1.4.3.1.patch
 URL:		http://jabberd.jabberstudio.org/1.4/
 BuildRequires:	expat-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pth-devel
-PreReq:		jabber-common
-PreReq:		rc-scripts
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires:	jabber-common
+Requires:	rc-scripts
 Obsoletes:	jabber
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -66,10 +67,10 @@ Serwer Jabbera oparty o jabberd-1.4.
 Summary:	Header and library files for jabberd14 component development
 Summary(pl):	Pliki nag³ówkowe i biblioteki dla komponentów jabberd14
 Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 Requires:	expat-devel
 Requires:	openssl-devel >= 0.9.7d
 Requires:	pth-devel
-Requires:	%{name} = %{version}-%{release}
 
 %description devel
 This package provides the files necessary to develop jabberd-1.4.x
@@ -126,21 +127,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %post server
 /sbin/chkconfig --add %{name}
-if [ -r /var/lock/subsys/%{name} ]; then
-	/etc/rc.d/init.d/%{name} restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start Jabber server."
-fi
+%service %{name} restart "Jabber server"
 
 %preun server
 if [ "$1" = "0" ]; then
-	if [ -r /var/lock/subsys/%{name} ]; then
-		/etc/rc.d/init.d/%{name} stop >&2
-	fi
+	%service %{name} stop
 	/sbin/chkconfig --del %{name}
 fi
-
-%postun
 
 %files
 %defattr(644,root,root,755)
