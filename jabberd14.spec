@@ -123,8 +123,6 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
-
 %post server
 /sbin/chkconfig --add %{name}
 %service %{name} restart "Jabber server"
