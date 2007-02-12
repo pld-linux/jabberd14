@@ -3,7 +3,7 @@
 %bcond_with	ipv6	# - with IPv6 support
 
 Summary:	Old "jabber.org" Jabber server daemon
-Summary(pl):	Stary serwer Jabbera "z jabber.org"
+Summary(pl.UTF-8):   Stary serwer Jabbera "z jabber.org"
 Name:		jabberd14
 Version:	1.4.3.1
 Release:	2
@@ -42,17 +42,17 @@ data between servers and ultimately to Jabber clients.
 This package contains old version of JSF jabberd Jabber server
 software, mainly for use with some old Jabber services.
 
-%description -l pl
-Jabber to oparty o XML, architekturê klient-server oraz filozofiê
-open-source system powiadamiania, który wykorzystuje rozproszon± sieæ
-serwerów, do przekazywania danych pomiêdzy nimi i klientami Jabber.
+%description -l pl.UTF-8
+Jabber to oparty o XML, architekturÄ™ klient-server oraz filozofiÄ™
+open-source system powiadamiania, ktÃ³ry wykorzystuje rozproszonÄ… sieÄ‡
+serwerÃ³w, do przekazywania danych pomiÄ™dzy nimi i klientami Jabber.
 
-Ten pakiet zawiera star± wersjê jabberd, g³ównie na potrzeby starszych
-serwisów Jabbera.
+Ten pakiet zawiera starÄ… wersjÄ™ jabberd, gÅ‚Ã³wnie na potrzeby starszych
+serwisÃ³w Jabbera.
 
 %package server
 Summary:	jabberd-1.4 based Jabber server
-Summary(pl):	Serwer Jabbera oparty o jabberd-1.4
+Summary(pl.UTF-8):   Serwer Jabbera oparty o jabberd-1.4
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	jabber
@@ -60,12 +60,12 @@ Obsoletes:	jabber
 %description server
 Jabber server based on jabberd v. 1.4.x.
 
-%description server -l pl
+%description server -l pl.UTF-8
 Serwer Jabbera oparty o jabberd-1.4.
 
 %package devel
 Summary:	Header and library files for jabberd14 component development
-Summary(pl):	Pliki nag³ówkowe i biblioteki dla komponentów jabberd14
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe i biblioteki dla komponentÃ³w jabberd14
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	expat-devel
@@ -76,8 +76,8 @@ Requires:	pth-devel
 This package provides the files necessary to develop jabberd-1.4.x
 extensions.
 
-%description devel -l pl
-Ten pakiet zawiera pliki niezbêdne do tworzenia rozszerzeñ serwera
+%description devel -l pl.UTF-8
+Ten pakiet zawiera pliki niezbÄ™dne do tworzenia rozszerzeÅ„ serwera
 jabberd-1.4.x.
 
 %prep
