@@ -3,7 +3,7 @@
 %bcond_with	ipv6	# - with IPv6 support
 
 Summary:	Old "jabber.org" Jabber server daemon
-Summary(pl.UTF-8):   Stary serwer Jabbera "z jabber.org"
+Summary(pl.UTF-8):	Stary serwer Jabbera "z jabber.org"
 Name:		jabberd14
 Version:	1.4.3.1
 Release:	2
@@ -52,7 +52,7 @@ serwisów Jabbera.
 
 %package server
 Summary:	jabberd-1.4 based Jabber server
-Summary(pl.UTF-8):   Serwer Jabbera oparty o jabberd-1.4
+Summary(pl.UTF-8):	Serwer Jabbera oparty o jabberd-1.4
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	jabber
@@ -65,7 +65,7 @@ Serwer Jabbera oparty o jabberd-1.4.
 
 %package devel
 Summary:	Header and library files for jabberd14 component development
-Summary(pl.UTF-8):   Pliki nagłówkowe i biblioteki dla komponentów jabberd14
+Summary(pl.UTF-8):	Pliki nagłówkowe i biblioteki dla komponentów jabberd14
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	expat-devel
