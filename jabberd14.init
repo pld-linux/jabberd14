@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 #
-#/etc/rc.d/init.d/jabberd14
-#
-# Starts the at daemon
+# Starts the jabber daemon
 #
 # chkconfig:	345 40 60
 # description:	jabberd-1.4 Jabber server
