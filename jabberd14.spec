@@ -94,7 +94,7 @@ jabberd-1.4.x.
 JHOME="%{_localstatedir}/lib/%{name}"; export JHOME
 %configure \
 	--enable-ssl \
-	--%{?with_ipv6:enable}%{?!with_ipv6:disable}-ipv6
+	--%{?with_ipv6:enable}%{!?with_ipv6:disable}-ipv6
 
 %{__make} \
 	CC="%{__cc}" \
